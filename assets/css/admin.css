@@ -1,0 +1,75 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2020. Nils Witt
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+html, body {
+	border: 0;
+	height: 100%;
+	margin: 0px;
+}
+
+.logo {
+	width: 15%;
+	height: 4%;
+	background-color: #3193c0;
+	float: left;
+	font-size: 20px;
+	text-align: center;
+	text-align-last: center;
+}
+
+.header {
+	background-color: lightgray;
+	border: none;
+	margin: 0px;
+	padding: 0;
+	height: 4%;
+	width: 85%;
+	float: right;
+}
+
+.statusicon {
+	background-color: #72FF48;
+	width: 10%;
+	height: 100%;
+	float: left;
+	text-align: center;
+
+}
+
+.logoutbutton {
+	background-color: transparent;
+	width: 10%;
+	height: 100%;
+	float: right;
+
+}
+
+.sidebar {
+	background-color: lightgray;
+	border: none;
+	margin: 0px;
+	height: 96%;
+	width: 15%;
+	float: left;
+}
+
+.sidebarcontent {
+	background-color: transparent;
+	width: 80%;
+	height: 95%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: auto;
+	margin-top: 5%;
+	line-height: 2;
+
+}

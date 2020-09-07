@@ -1,0 +1,209 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2020. Nils Witt
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+
+tr {
+    mso-height-source: auto;
+}
+
+col {
+    mso-width-source: auto;
+}
+
+br {
+    mso-data-placement: same-cell;
+}
+
+.style0 {
+    mso-number-format: General;
+    text-align: general;
+    vertical-align: bottom;
+    white-space: nowrap;
+    mso-rotate: 0;
+    mso-background-source: auto;
+    mso-pattern: auto;
+    color: windowtext;
+    font-size: 10.0pt;
+    font-weight: 400;
+    font-style: normal;
+    text-decoration: none;
+    font-family: Arial;
+    mso-generic-font-family: auto;
+    mso-font-charset: 0;
+    border: none;
+    mso-protection: locked visible;
+    mso-style-name: Standard;
+    mso-style-id: 0;
+}
+
+td {
+    mso-style-parent: style0;
+    padding-top: 1px;
+    padding-right: 1px;
+    padding-left: 1px;
+    mso-ignore: padding;
+    color: windowtext;
+    font-size: 10.0pt;
+    font-weight: 400;
+    font-style: normal;
+    text-decoration: none;
+    font-family: Arial;
+    mso-generic-font-family: auto;
+    mso-font-charset: 0;
+    mso-number-format: General;
+    text-align: general;
+    vertical-align: bottom;
+    border: none;
+    mso-background-source: auto;
+    mso-pattern: auto;
+    mso-protection: locked visible;
+    white-space: nowrap;
+    mso-rotate: 0;
+}
+
+.xl68 {
+    mso-style-parent: style0;
+    font-size: 14.0pt;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    mso-font-charset: 0;
+    mso-number-format: ddd;
+    text-align: center;
+}
+
+.xl69 {
+    mso-style-parent: style0;
+    font-size: 14.0pt;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    mso-font-charset: 0;
+    text-align: center;
+}
+
+.xl70 {
+    mso-style-parent: style0;
+    font-size: 14.0pt;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    mso-font-charset: 0;
+    mso-number-format: "d\/m";
+    text-align: center;
+}
+
+.xl71 {
+    mso-style-parent: style0;
+    font-size: 14.0pt;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    mso-font-charset: 0;
+    mso-number-format: "dd\/\\ mmm";
+    text-align: center;
+}
+
+.xl72 {
+    mso-style-parent: style0;
+    font-size: 14.0pt;
+    font-family: Arial, sans-serif;
+    mso-font-charset: 0;
+    mso-number-format: 0;
+    text-align: center;
+}
+
+.xl74 {
+    mso-style-parent: style0;
+    font-size: 14.0pt;
+    font-family: Arial, sans-serif;
+    mso-font-charset: 0;
+    text-align: center;
+}
+
+.xl77 {
+    mso-style-parent: style0;
+    font-size: 14.0pt;
+    font-family: Arial, sans-serif;
+    mso-font-charset: 0;
+    text-align: center;
+    border-top: none;
+    border-right: none;
+    border-bottom: 2.0pt double windowtext;
+    border-left: none;
+}
+
+.xl78 {
+    mso-style-parent: style0;
+    font-size: 14.0pt;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    mso-font-charset: 0;
+    text-align: center;
+}
+
+.xl94 {
+    mso-style-parent: style0;
+    font-size: 14.0pt;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    mso-font-charset: 0;
+    text-align: center;
+    background: #FFC000;
+    mso-pattern: black none;
+    white-space: normal;
+}
+
+#rowTime {
+    height: 18.0px;
+    width: 75px
+}
+
+#rowCourse {
+    width: 122px
+}
+
+#rowSpacer {
+    width: 53px
+}
+
+#rowTeacher {
+    width: 5px
+}
+
+#rowRoom {
+    width: 47px
+}
+
+#row1 {
+    width: 30px
+}
+
+#row2 {
+    width: 30px
+}
+
+#row3 {
+    width: 30px
+}
+
+#row4 {
+    width: 30px
+}
+
+#row5 {
+    width: 30px
+}
+
+#row6 {
+    width: 30px
+}
+
+#row7 {
+    width: 30px
+}

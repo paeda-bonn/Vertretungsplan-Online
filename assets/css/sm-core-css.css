@@ -1,0 +1,114 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2020. Nils Witt
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/* SmartMenus Core CSS (it's not recommended editing this)
+===============================================================*/
+
+.sm, .sm ul, .sm li {
+    display: block;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    line-height: normal;
+    direction: ltr;
+}
+
+ul.sm li {
+    position: relative;
+}
+
+ul.sm a {
+    position: relative;
+    display: block;
+}
+
+ul.sm a.disabled {
+    cursor: default;
+}
+
+ul.sm ul {
+    position: absolute;
+    top: -999999px;
+    left: -800px;
+    width: 100px;
+}
+
+ul.sm li {
+    float: left;
+}
+
+ul.sm-rtl {
+    direction: rtl;
+}
+
+ul.sm-rtl li {
+    float: right;
+}
+
+ul.sm ul li, ul.sm-vertical li {
+    float: none;
+}
+
+ul.sm a {
+    white-space: nowrap;
+}
+
+ul.sm ul a, ul.sm-vertical a {
+    white-space: normal;
+}
+
+* html ul.sm-vertical li {
+    float: left;
+    width: 100%;
+}
+
+* html ul.sm-vertical ul li {
+    float: none;
+    width: auto;
+}
+
+*:first-child + html ul.sm-vertical > li {
+    float: left;
+    width: 100%;
+}
+
+ul.sm ul.sm-nowrap > li > a {
+    white-space: nowrap;
+}
+
+ul.sm:after {
+    content: "\00a0";
+    display: block;
+    height: 0;
+    font: 0/0 serif;
+    clear: both;
+    visibility: hidden;
+    overflow: hidden;
+}
+
+* html ul.sm {
+    height: 1px;
+}
+
+*:first-child + html ul.sm {
+    min-height: 1px;
+}
+
+ul.sm li *, ul.sm li *:before, ul.sm li *:after {
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+ul.sm {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
