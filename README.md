@@ -1,6 +1,6 @@
-#Vertretungsplan Webansicht
+# Vertretungsplan Webansicht
 
-##install
+## install
 Put the following files in the specified directories:
 
 [SimpleXLSX.php](https://github.com/shuchkin/simplexlsx/) in dependencies/
