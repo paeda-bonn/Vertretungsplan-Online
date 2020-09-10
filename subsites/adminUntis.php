@@ -11,9 +11,11 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-$secret = $config->api_secret;
-$supervisonTimes = array("0/1" => "Früh", "2/3" => "1. Pause");
-$supervisonTimesKeys = array("0/1", "2/3");
+if (!empty($config)) {
+    $secret = $config->api_secret;
+}
+$supervisonTimes = array("0/1" => "Früh", "2/3" => "1. Pause", "4/5" => "2. Pause");
+$supervisonTimesKeys = array("0/1", "2/3", "4/5");
 
 function curlToApi($json, $urlargs)
 {
@@ -60,6 +62,38 @@ function generateid($date, $kurs, $stunde, $teacher)
     return $id;
 }
 
+function createVertRow($vertretung)
+{
+
+    echo "<tr style='background-color: lightgreen'>";
+    echo "<td></td>";
+    echo "<td></td>";
+    echo "<td></td>";
+    echo "<td>";
+    echo $vertretung["date"];
+    echo "</td>";
+    echo "<td>";
+    echo $vertretung["lesson"];
+    echo "</td>";
+    echo "<td>";
+    echo $vertretung["class"];
+    echo "</td>";
+    echo "<td>";
+    echo $vertretung["newTeacher"];
+    echo "</td>";
+    echo "<td>";
+    echo $vertretung["newRoom"];
+    echo "</td>";
+    echo "<td>";
+    echo $vertretung["subject"];
+    echo "</td>";
+    echo "<td></td>";
+    echo "<td></td>";
+    echo "<td>";
+    echo $vertretung["info"];
+    echo "</td>";
+    echo "</tr>";
+}
 
 function loadXlsx()
 {
@@ -71,7 +105,6 @@ function loadXlsx()
 
     copy(__DIR__ . '/../ImportFiles/Untis.xlsx', __DIR__ . '/../Imported/Untis-' . date("Y-m-d-H-i-s") . '_' . rand(10000, 999999) . '.xlsx');
 
-
     $refreshed = date('d.m.Y H:i', filemtime(__DIR__ . '/../ImportFiles/Untis.xlsx'));
     if ($xlsx = SimpleXLSX::parse(__DIR__ . '/../ImportFiles/Untis.xlsx')) {
         $rowNum = 1;
@@ -80,7 +113,18 @@ function loadXlsx()
                 $removeSequences = array("<s>", "</s>");
                 $row[$key] = str_replace($removeSequences, "", $value);
             }
-            echo "ROW:" . $rowNum . json_encode($row) . "<br>\n";
+            echo "<tr>";
+            echo "<td>";
+            echo $rowNum;
+            echo "</td>";
+            foreach ($row as $key => $value) {
+                echo "<td>";
+                echo $row[$key];
+                echo "</td>";
+            }
+            echo "</tr>";
+
+            //echo "ROW:" . $rowNum . json_encode($row) . "<br>\n";
             if ($row[0] != "") {
                 if ($row[1] == "Vertretung" || $row[1] == "Raum-Vtr." || $row[1] == "Betreuung" || $row[1] == "Statt-Vertretung" || $row[1] == "Lehrertausch" || $row[1] == "Trotz Absenz" || $row[1] == "Verlegung") {
                     $lessons = explode("-", $row[3]);
@@ -123,10 +167,9 @@ function loadXlsx()
                         }
                         $event["id"] = generateid($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
 
-                        echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
+                        //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
                         array_push($vertretung, $event);
-
-
+                        createVertRow($event);
                     }
 
                     if (!in_array($event["date"], $days)) {
@@ -158,9 +201,10 @@ function loadXlsx()
                             }
                             $event["id"] = generateid($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
 
-                            echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
+                            //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
                             if ($row[4] != "") {
                                 array_push($vertretung, $event);
+                                createVertRow($event);
                                 if (!in_array($event["date"], $days)) {
                                     array_push($days, $event["date"]);
                                 }
@@ -202,8 +246,9 @@ function loadXlsx()
                             $event["class"] = $event["class"] . "/" . $subject[0];
                         }
                         $event["id"] = generateid($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
-                        echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
+                        //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
                         array_push($vertretung, $event);
+                        createVertRow($event);
                     }
 
                     if (!in_array($event["date"], $days)) {
@@ -222,7 +267,7 @@ function loadXlsx()
 
                     $event["teacher"] = $teacher[1];
                     $event["location"] = $row[6];
-                    echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
+                    //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
                     array_push($aufsichten, $event);
                 }
             }
@@ -266,9 +311,16 @@ function loadXlsx()
     $output[] = array("mode" => "update", "type" => "config", "data" => array("activeDates" => $dates, "lastRefreshed" => $refreshed));
     return $output;
 }
+?>
+    <table>
+        <tbody>
+        <?php
+        $insert = loadXlsx();
+        ?>
+        </tbody>
+    </table>
 
-$insert = loadXlsx();
-
+<?php
 $i = 0;
 foreach ($insert[0]["days"] as $day) {
     if ($i == 0) {
@@ -321,3 +373,4 @@ if (isset($activeData["data"]["aufsichten"])) {
 $inserted = curlToApi(json_encode($insert), "secret=" . $secret . "&mode=edit");
 echo "<h1>Completed</h1>";
 echo(json_encode($insert));
+
