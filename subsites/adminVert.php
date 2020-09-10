@@ -186,9 +186,7 @@ function loadXml()
                 $event["id"] = generateid($date, $klasse, $stunde);
 
                 array_push($vertretung, $event);
-                if (in_array($date, $days)) {
-
-                } else {
+                if (!in_array($date, $days)) {
                     $days[] = $date;
                 }
             }
