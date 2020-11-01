@@ -62,9 +62,7 @@ function createVertRow($vertretung)
 {
 
     echo "<tr style='background-color: lightgreen'>";
-    echo "<td></td>";
-    echo "<td></td>";
-    echo "<td></td>";
+    echo "<td colspan='3'></td>";
     echo "<td>";
     echo $vertretung["date"];
     echo "</td>";
@@ -83,8 +81,7 @@ function createVertRow($vertretung)
     echo "<td>";
     echo $vertretung["subject"];
     echo "</td>";
-    echo "<td></td>";
-    echo "<td></td>";
+    echo "<td colspan='2'></td>";
     echo "<td>";
     echo $vertretung["info"];
     echo "</td>";
@@ -121,7 +118,7 @@ function loadXlsx() {
 
             //echo "ROW:" . $rowNum . json_encode($row) . "<br>\n";
             if ($row[0] != "") {
-                if ($row[1] == "Vertretung" || $row[1] == "Raum-Vtr." || $row[1] == "Betreuung" || $row[1] == "Statt-Vertretung" || $row[1] == "Lehrertausch" || $row[1] == "Trotz Absenz" || $row[1] == "Verlegung") {
+                if ($row[1] == "Vertretung" || $row[1] == "Sondereins." || $row[1] == "Raum-Vtr." ||$row[1] == "Raumänderung" || $row[1] == "Betreuung" || $row[1] == "Statt-Vertretung" || $row[1] == "Lehrertausch" || $row[1] == "Trotz Absenz" || $row[1] == "Verlegung") {
                     $lessons = explode("-", $row[3]);
                     $teacher = explode("→", $row[5]);
                     $subject = explode("→", $row[7]);
@@ -154,13 +151,18 @@ function loadXlsx() {
 
                         $event["info"] = $row[10];
                         if ($event["info"] == "") {
-                            $event["info"] = $row[1];
+                            if($row[1] == "Raum-Vtr."){
+                                $event["info"] = "Raumänderung";
+                            }else{
+                                $event["info"] = $row[1];
+                            }
+
                         }
                         $event["class"] = $row[4];
                         if ($event["class"] == "Q1" || $event["class"] == "Q2" || $event["class"] == "EF") {
                             $event["class"] = $event["class"] . "/" . $subject[0];
                         }
-                        $event["id"] = generateid($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
+                        $event["id"] = generateId($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
 
                         //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
                         array_push($vertretung, $event);
@@ -194,14 +196,29 @@ function loadXlsx() {
                             if ($event["class"] == "Q1" || $event["class"] == "Q2" || $event["class"] == "EF") {
                                 $event["class"] = $event["class"] . "/" . $subject[0];
                             }
-                            $event["id"] = generateid($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
+                            $event["id"] = generateId($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
 
                             //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
+                            $dateString = str_pad($dateParts[0],2,"0",STR_PAD_LEFT)."-".str_pad($dateParts[1],2,"0",STR_PAD_LEFT)."-2020" ;
+                            $examsInLesson = json_decode(file_get_contents(Config::$url_web."/api/klausuren.php?date=".$dateString."&secret=". Config::$api_secret));
+
+                            $isKLSup = false;
+                            $lesson = str_replace(" ", "", $lesson);
+                            foreach ($examsInLesson as $exam){
+                                if($event["teacher"] == $exam->$lesson){
+                                    $isKLSup = true;
+                                    $event["info"] = "KL - nicht übertragen";
+                                }
+                            }
                             if ($row[4] != "") {
-                                array_push($vertretung, $event);
-                                createVertRow($event);
-                                if (!in_array($event["date"], $days)) {
-                                    array_push($days, $event["date"]);
+
+                                if(!$isKLSup){
+                                    createVertRow($event);
+                                    array_push($vertretung, $event);
+
+                                    if (!in_array($event["date"], $days)) {
+                                        array_push($days, $event["date"]);
+                                    }
                                 }
                             }
                         }
@@ -240,7 +257,7 @@ function loadXlsx() {
                         if ($event["class"] == "Q1" || $event["class"] == "Q2" || $event["class"] == "EF") {
                             $event["class"] = $event["class"] . "/" . $subject[0];
                         }
-                        $event["id"] = generateid($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
+                        $event["id"] = generateId($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
                         //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
                         array_push($vertretung, $event);
                         createVertRow($event);
