@@ -26,25 +26,40 @@ if ($config->https) {
         exit();
     }
 }
-
-if (isset($_SERVER['PHP_AUTH_USER'])) {
-    $user = $_SERVER['PHP_AUTH_USER'];
-    $pass = $_SERVER['PHP_AUTH_PW'];
-    if ($config->loginAdmin($user, $pass)) {
-        $admin = true;
-    } elseif ($config->login($user, $pass)) {
-        $admin = false;
-    } else {
-        header('WWW-Authenticate: Basic realm="Vertretungsplan"');
-        header('HTTP/1.0 401 Unauthorized');
-        die ("Not authorized");
-    }
-} else {
-    header('WWW-Authenticate: Basic realm="Vertretungsplan"');
-    header('HTTP/1.0 401 Unauthorized');
-    die ("Not authorized");
+session_start();
+if(isset($_POST["username"])){
+    $user = $_POST["username"];
+}else{
+    $user = $_SESSION["username"];
 }
 
+if(isset($_POST["password"])){
+    $pass = $_POST["password"];
+}else{
+    $pass = $_SESSION["password"];
+}
+
+if(isset($_GET["logout"])){
+    $pass = "asd";
+}
+
+if ($config->loginAdmin($user, $pass)) {
+    $admin = true;
+    $_SESSION["password"] = $pass;
+    $_SESSION["username"] = $user;
+    $_SESSION["admin"] = "true";
+    if (!isset($_GET["subsite"])) {
+        $_GET["subsite"] = "admin";
+    }
+} elseif ($config->login($user, $pass)) {
+    $admin = false;
+    $_SESSION["password"] = $pass;
+    $_SESSION["username"] = $user;
+    $_SESSION["admin"] = "false";
+} else {
+    echo file_get_contents("views/login.html");
+    die();
+}
 if (isset($_GET["subsite"])) {
     $subsite = htmlspecialchars($_GET["subsite"]);
     if ($subsite == "") {
@@ -54,9 +69,11 @@ if (isset($_GET["subsite"])) {
     $subsite = "vertretungsplan";
 }
 
-if (substr($subsite, 0, 5) == "admin" and !$admin) {
-    header('WWW-Authenticate: Basic realm="Vertretungsplan"');
-    header('HTTP/1.0 401 Unauthorized');
+if (substr($subsite, 0, 5) == "admin" and !($_SESSION["admin"] == "true")) {
+    echo file_get_contents("views/login.html");
+    ?>
+<p style="color: red">Admin req</p>
+<?php
     die();
 }
 
