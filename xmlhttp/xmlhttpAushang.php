@@ -21,31 +21,19 @@ if ($_SERVER['REQUEST_METHOD'] == "OPTIONS") {
     die(200);
 }
 
-
+session_start();
 require_once("../config.php");
-$config = new Config;
-
-if (isset($_SERVER['PHP_AUTH_USER'])) {
-    $user = $_SERVER['PHP_AUTH_USER'];
-    $pass = $_SERVER['PHP_AUTH_PW'];
-    if ($config->loginAdmin($user, $pass)) {
-        $admin = true;
-    } else {
-        header('WWW-Authenticate: Basic realm="Vertretungsplan"');
-        header('HTTP/1.0 401 Unauthorized');
-        die ("Not authorized");
-    }
+$user = $_GET["username"];
+$pass = $_GET["password"];
+if (Config::loginAdmin($user, $pass)) {
+    $admin = true;
 } else {
-    header('WWW-Authenticate: Basic realm="Vertretungsplan"');
-    header('HTTP/1.0 401 Unauthorized');
     die ("Not authorized");
 }
 
+function curlToApi($mode, $json){
 
-function curlToApi($config, $mode, $json)
-{
-
-    $ch = curl_init($config->url_api . '/aushang.php?aushang=' . $mode . '&secret=' . $config->api_secret);
+    $ch = curl_init(Config::$url_api . '/aushang.php?aushang=' . $mode . '&secret=' . Config::$api_secret);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -97,19 +85,21 @@ $json = json_encode($data);
 $action = htmlspecialchars($_GET["action"]);
 
 if ($action == "create") {
-    echo curlToApi($config, "create", $json);
+    echo $json;
+    echo "Res0";
+    echo curlToApi( "create", $json);
 } elseif ($action == "createPreset") {
-    echo curlToApi($config, "createPreset", $json);
+    echo curlToApi( "createPreset", $json);
 } elseif ($action == "delete") {
-    echo curlToApi($config, "delete", $json);
+    echo curlToApi( "delete", $json);
 } elseif ($action == "update") {
-    echo curlToApi($config, "update", $json);
+    echo curlToApi( "update", $json);
 } elseif ($action == "move") {
-    echo curlToApi($config, "updateOrder", $json);
+    echo curlToApi( "updateOrder", $json);
 } elseif ($action == "movePreset") {
-    echo curlToApi($config, "updateOrderPreset", $json);
+    echo curlToApi( "updateOrderPreset", $json);
 } elseif ($action == "load") {
-    $json = file_get_contents($config->url_api . '/aushang.php?aushang=1&secret=' . $config->api_secret);
+    $json = file_get_contents(Config::$url_api . '/aushang.php?aushang=1&secret=' . Config::$api_secret);
     $aushangdata = json_decode($json);
 
     foreach ($aushangdata as $row) {
@@ -166,7 +156,7 @@ if ($action == "create") {
 
     }
 } elseif ($action == "presets") {
-    $json = file_get_contents($config->url_api . '/aushang.php?aushang=presets&secret=' . $config->api_secret);
+    $json = file_get_contents(Config::$url_api.'/aushang.php?aushang=presets&secret='.Config::$api_secret);
     $aushangdata = json_decode($json);
 
     foreach ($aushangdata as $row) {

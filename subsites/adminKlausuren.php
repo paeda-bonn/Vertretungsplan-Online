@@ -42,7 +42,6 @@
 </script>
 
 <?php
-$secret = $config->api_secret;
 $lessons = array();
 $lessons[1] = array();
 $lessons[1]["begin"] = "07:50";
@@ -378,14 +377,14 @@ if (true) {
     $deleteData["type"] = "klausuren";
     $deleteData["data"] = array("%");
 
-    $response = curlToApi(json_encode(array($deleteData)), "secret=$secret&mode=edit");
+    $response = curlToApi(json_encode(array($deleteData)), "secret=".Config::$api_secret."&mode=edit");
 }
 
 $insert["mode"] = "insert";
 $insert["type"] = "klausuren";
 $insert["data"] = xmlToArray($xml);
 
-$response = curlToApi(json_encode(array($insert)), "secret=$secret&mode=edit");
+$response = curlToApi(json_encode(array($insert)), "secret=".Config::$api_secret."&mode=edit");
 echo "<h1>Completed</h1>";
 echo "<h2>Fehlerhaft (" . $err . "):</h2><button onclick='toggleTableErr()'>Anzeigen</button>";
 echo $tableErr;

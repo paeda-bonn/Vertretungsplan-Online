@@ -100,7 +100,7 @@ function sortReplacementLessons($data)
 
 $days = "";
 $i = 0;
-$url = $config->url_api . 'vertretungsplan.php?active&secret=' . $config->api_secret;
+$url = Config::$url_api . 'vertretungsplan.php?active&secret=' . Config::$api_secret;
 $json = file_get_contents($url);
 $data = json_decode($json, true);
 if (isset($data["access"])) {

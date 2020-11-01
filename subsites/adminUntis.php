@@ -17,12 +17,11 @@ if (!empty($config)) {
 $supervisonTimes = array("0/1" => "Früh", "2/3" => "1. Pause", "4/5" => "2. Pause");
 $supervisonTimesKeys = array("0/1", "2/3", "4/5");
 
-function curlToApi($json, $urlargs)
-{
-    global $config;
+function curlToApi($json, $urlargs){
+
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => $config->url_api . "/vertretungsplan.php?" . $urlargs,
+        CURLOPT_URL => Config::$url_api . "/vertretungsplan.php?" . $urlargs,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "",
         CURLOPT_MAXREDIRS => 10,
@@ -37,13 +36,10 @@ function curlToApi($json, $urlargs)
     return curl_exec($curl);
 }
 
-function generateid($date, $kurs, $stunde, $teacher)
-{
+function generateId($date, $kurs, $stunde, $teacher){
 
     $timestamp = strtotime($date);
     $kursex = explode("/", str_replace(' ', '', $kurs));
-    if ($kursex[0] != "EF" || $kursex[0] != "Q1" || $kursex[0] != "Q2") {
-    }
     $stufe = $kursex[0];
     if (isset($kursex[1])) {
         $kurs = $kursex[1];
@@ -95,9 +91,8 @@ function createVertRow($vertretung)
     echo "</tr>";
 }
 
-function loadXlsx()
-{
-    global $supervisonTimes, $supervisonTimesKeys;
+function loadXlsx() {
+    global $supervisonTimes, $supervisonTimesKeys, $secret;
     $days = array();
     $i = 1;
     $vertretung = array();
@@ -331,7 +326,7 @@ foreach ($insert[0]["days"] as $day) {
     }
 }
 
-$data = curlToApi("", "secret=" . $secret . "&dates=" . $dates);
+$data = curlToApi("", "secret=" . Config::$api_secret . "&dates=" . $dates);
 $activeData = json_decode($data, true);
 
 $delete = array();
@@ -350,7 +345,7 @@ if (isset($activeData["data"]["vertretungen"])) {
     $deleteVert["type"] = "vertretungen";
     $deleteVert["data"] = $activeIds;
 
-    $response = curlToApi(json_encode(array($deleteVert)), "secret=" . $secret . "&mode=edit");
+    $response = curlToApi(json_encode(array($deleteVert)), "secret=" . Config::$api_secret . "&mode=edit");
 
 }
 
@@ -368,9 +363,7 @@ if (isset($activeData["data"]["aufsichten"])) {
     $deleteAufsichten["type"] = "aufsichten";
     $deleteAufsichten["data"] = $activeIds;
 
-    $response = curlToApi(json_encode(array($deleteAufsichten)), "secret=" . $secret . "&mode=edit");
+    $response = curlToApi(json_encode(array($deleteAufsichten)), "secret=" . Config::$api_secret . "&mode=edit");
 }
-$inserted = curlToApi(json_encode($insert), "secret=" . $secret . "&mode=edit");
+$inserted = curlToApi(json_encode($insert), "secret=" . Config::$api_secret . "&mode=edit");
 echo "<h1>Completed</h1>";
-echo(json_encode($insert));
-
