@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bc81001a-1e07-48bc-a4c1-e12f554d75c8" name="Default Changelist" comment="updated aushang Admin for new auth process">
+      <change afterPath="$PROJECT_DIR$/views/vertretungsplan.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/subsites/adminKlausuren.php" beforeDir="false" afterPath="$PROJECT_DIR$/subsites/adminKlausuren.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/subsites/klausuren.php" beforeDir="false" afterPath="$PROJECT_DIR$/subsites/klausuren.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="tsconfig.json" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="NIls WItt &lt;nils@nils-witt.de&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="SIGN_OFF_COMMIT" value="true" />
+  </component>
+  <component name="ProjectId" id="1jhXcJq6xfZ7TnPd6JH5OINnHk7" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
+    <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bc81001a-1e07-48bc-a4c1-e12f554d75c8" name="Default Changelist" comment="" />
+      <created>1604257375384</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1604257375384</updated>
+      <workItem from="1604257376636" duration="1327000" />
+    </task>
+    <task id="LOCAL-00001" summary="Switched from basic auth to session based">
+      <created>1604257864395</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1604257864395</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added Scss support">
+      <created>1604258018095</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1604258018095</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Replaced Globle config vars with a Class">
+      <created>1604258285550</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1604258285550</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Replaced Global language vars with a Class">
+      <created>1604258378865</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1604258378865</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Removed old subsite">
+      <created>1604258393454</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1604258393454</updated>
+    </task>
+    <task id="LOCAL-00006" summary="updated utils.ts">
+      <created>1604258541153</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1604258541153</updated>
+    </task>
+    <task id="LOCAL-00007" summary="added tsconfig.json">
+      <created>1604258566339</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1604258566339</updated>
+    </task>
+    <task id="LOCAL-00008" summary="updated import processing">
+      <created>1604258585811</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1604258585811</updated>
+    </task>
+    <task id="LOCAL-00009" summary="updated aushang Admin for new auth process">
+      <created>1604258669187</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1604258669187</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Switched from basic auth to session based" />
+    <MESSAGE value="Added Scss support" />
+    <MESSAGE value="Replaced Globle config vars with a Class" />
+    <MESSAGE value="Replaced Global language vars with a Class" />
+    <MESSAGE value="Removed old subsite" />
+    <MESSAGE value="updated utils.ts" />
+    <MESSAGE value="added tsconfig.json" />
+    <MESSAGE value="updated import processing" />
+    <MESSAGE value="updated aushang Admin for new auth process" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated aushang Admin for new auth process" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="880" y="373" key="#Deployment" timestamp="1604257500806">
+      <screen x="0" y="23" width="2560" height="1369" />
+    </state>
+    <state x="880" y="373" key="#Deployment/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604257500806" />
+    <state x="860" y="283" key="CommitChangelistDialog2" timestamp="1604257756801">
+      <screen x="0" y="23" width="2560" height="1369" />
+    </state>
+    <state x="860" y="283" key="CommitChangelistDialog2/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604257756801" />
+    <state x="256" y="149" key="DiffContextDialog" timestamp="1604257613411">
+      <screen x="0" y="23" width="2560" height="1369" />
+    </state>
+    <state x="256" y="149" key="DiffContextDialog/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604257613411" />
+    <state x="1013" y="417" key="RollbackChangesDialog" timestamp="1604258399895">
+      <screen x="0" y="23" width="2560" height="1369" />
+    </state>
+    <state x="1013" y="417" key="RollbackChangesDialog/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604258399895" />
+    <state x="789" y="346" key="SettingsEditor" timestamp="1604258517809">
+      <screen x="0" y="23" width="2560" height="1369" />
+    </state>
+    <state x="789" y="346" key="SettingsEditor/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604258517809" />
+    <state x="880" y="447" key="Vcs.Push.Dialog.v2" timestamp="1604258022285">
+      <screen x="0" y="23" width="2560" height="1369" />
+    </state>
+    <state x="880" y="447" key="Vcs.Push.Dialog.v2/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604258022285" />
+    <state x="1123" y="613" key="WebDeployment.AddServerDialog.v.1" timestamp="1604257455780">
+      <screen x="0" y="23" width="2560" height="1369" />
+    </state>
+    <state x="1123" y="613" key="WebDeployment.AddServerDialog.v.1/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604257455780" />
+    <state x="1187" y="445" key="ftp.server.browser" timestamp="1604257499752">
+      <screen x="0" y="23" width="2560" height="1369" />
+    </state>
+    <state x="1187" y="445" key="ftp.server.browser/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604257499752" />
+  </component>
+</project>
