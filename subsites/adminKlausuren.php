@@ -73,10 +73,9 @@ $lessons[7]["end"] = "14:00";
 
 function curlToApi($json, $urlargs)
 {
-    global $config;
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => $config->url_api . "/klausuren.php?$urlargs",
+        CURLOPT_URL => Config::$url_api . "/klausuren.php?$urlargs",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "",
         CURLOPT_MAXREDIRS => 10,
