@@ -21,7 +21,7 @@ $stufethreecolor = "#00B050";
 
 $weekdays = array("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa");
 
-$json = file_get_contents($config->url_api . 'klausuren.php?active&upcoming&secret=' . $config->api_secret);
+$json = file_get_contents(Config::$url_api . 'klausuren.php?active&upcoming&secret=' . Config::$api_secret);
 $data = json_decode($json, true);
 if (isset($data["access"])) {
     if (!$data["access"]) {
