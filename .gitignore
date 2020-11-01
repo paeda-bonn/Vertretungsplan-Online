@@ -1,3 +1,9 @@
 /Imported/
 /ImportFiles/
 /config.php
+
+*.css
+*.css.map
+*.js
+*.js.map
+/dependencies/SimpleXLSX.php
