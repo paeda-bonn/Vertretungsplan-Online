@@ -11,6 +11,7 @@
  */
 
 document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOMContentLoaded");
     load();
 });
 
@@ -32,6 +33,9 @@ function adjustTextAreas() {
 }
 
 function resetInput() {
-    document.getElementById('web.0.content').value = "";
-    document.getElementById('web.0.content2').value = ""
+    let web0content = <HTMLInputElement>document.getElementById('web.0.content');
+    let web0content2 = <HTMLInputElement>document.getElementById('web.0.content2');
+    web0content.value = "";
+    web0content2.value = ""
 }
+
