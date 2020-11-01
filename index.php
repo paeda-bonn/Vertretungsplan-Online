@@ -88,7 +88,7 @@ if (substr($subsite, 0, 5) == "admin" and !($_SESSION["admin"] == "true")) {
     <link href="assets/css/sm-blue.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="assets/css/vertretungsplan.css">
     <title>
-        <?php echo $langhtmlonliverttitle ?>
+        <?php echo Language::$langhtmlonliverttitle ?>
     </title>
 </head>
 <body>

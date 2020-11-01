@@ -109,10 +109,10 @@ if (isset($data["access"])) {
     }
 }
 $refreshed = "";
-echo "<h1>$langhtmlonlivertheadline</h1>
-	<p>$langhtmlonlivertunderlineone
+echo "<h1>".Language::$langhtmlonlivertheadline."</h1>
+	<p>".Language::$langhtmlonlivertunderlineone."
 	<br>
-	<span>$langhtmlonlivertunderlinetwo " . $data["info"]["refreshed"] . "</span>
+	<span>".Language::$langhtmlonlivertunderlinetwo." " . $data["info"]["refreshed"] . "</span>
 	</p>";
 foreach ($data["info"]["days"] as $day) {
     if (isset($data["data"]["vertretungen"][$day])) {
@@ -121,18 +121,18 @@ foreach ($data["info"]["days"] as $day) {
 
         $date = displaydate($day);
         echo "<p>
-			<span class=\"vpfuer\">$langhtmlonlivertdayhead <span class=\"vpfuerdatum\">" . $date . "</span></span>
+			<span class=\"vpfuer\">".Language::$langhtmlonlivertdayhead." <span class=\"vpfuerdatum\">" . $date . "</span></span>
 			<br>
 			</p>";
         echo "<table border=\"2\" class=\"tablekopf\">
 			<tr>
-			<th class=\"thlplanklasse\">$langhtmlonliverttablerowone</th>
-			<th class=\"thlplanstunde\">$langhtmlonliverttablerowtwo</th>
-			<th class=\"thlplanfach\">$langhtmlonliverttablerowthree</th>
-			<th class=\"thlplanvfach\">$langhtmlonliverttablerowfour</th>
-			<th class=\"thlplanvlehrer\">$langhtmlonliverttablerowfive</th>
-			<th class=\"thlplanvraum\">$langhtmlonliverttablerowsix</th>
-			<th class=\"thlplaninfo\">$langhtmlonliverttablerowseven</th>
+			<th class=\"thlplanklasse\">".Language::$langhtmlonliverttablerowone."</th>
+			<th class=\"thlplanstunde\">".Language::$langhtmlonliverttablerowtwo."</th>
+			<th class=\"thlplanfach\">".Language::$langhtmlonliverttablerowthree."</th>
+			<th class=\"thlplanvfach\">".Language::$langhtmlonliverttablerowfour."</th>
+			<th class=\"thlplanvlehrer\">".Language::$langhtmlonliverttablerowfive."</th>
+			<th class=\"thlplanvraum\">".Language::$langhtmlonliverttablerowsix."</th>
+			<th class=\"thlplaninfo\">".Language::$langhtmlonliverttablerowseven."</th>
 			</tr>";
         for ($i = 0; $i < count($vertretungen); $i++) {
             echo "<tr>
@@ -150,7 +150,7 @@ foreach ($data["info"]["days"] as $day) {
     }
     if (isset($data["data"]["aufsichten"][$day])) {
         $aufsichten = $data["data"]["aufsichten"][$day];
-        echo "<span class=\"aufsichtenkopf\">$langhtmlonlivertdayunterline</span><table>";
+        echo "<span class=\"aufsichtenkopf\">".Language::$langhtmlonlivertdayunterline."</span><table>";
         foreach ($aufsichten as $row) {
             echo "<tr><td class=\"aufsicht\">" . $row["Zeit"] . ": " . $row["Ort"] . " --> " . $row["Lehrer"] . "</td></tr>";
         }

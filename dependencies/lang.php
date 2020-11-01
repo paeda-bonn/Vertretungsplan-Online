@@ -27,4 +27,21 @@ $langhtmlonliverttablerowfive = "Vert.";
 $langhtmlonliverttablerowsix = "Raum neu";
 $langhtmlonliverttablerowseven = "Bemerkung";
 
+class Language
+{
+    public static $langhtmlonliverttitle = "Vertretungsplan";
+    public static $langhtmlonlivertheadline = "Vertretungsplan";
+    public static $langhtmlonlivertunderlineone = "Bitte achte bei jeder Vertretungsstunde darauf, dass auch wirklich dein Kurs gemeint ist.";
+    public static $langhtmlonlivertunderlinetwo = "letzte Aktualisierung:";
+    public static $langhtmlonlivertdayhead = "Vertretungsplan f&uuml;r";
+    public static $langhtmlonlivertdayunterline = "Ge&auml;nderte Aufsichten:";
+    public static $langhtmlonliverttablerowone = "Klasse";
+    public static $langhtmlonliverttablerowtwo = "Std.";
+    public static $langhtmlonliverttablerowthree = "Fach";
+    public static $langhtmlonliverttablerowfour = "Fach neu";
+    public static $langhtmlonliverttablerowfive = "Vert.";
+    public static $langhtmlonliverttablerowsix = "Raum neu";
+    public static $langhtmlonliverttablerowseven = "Bemerkung";
+}
+
 ?>
