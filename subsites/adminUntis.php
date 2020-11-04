@@ -118,7 +118,8 @@ function loadXlsx() {
 
             //echo "ROW:" . $rowNum . json_encode($row) . "<br>\n";
             if ($row[0] != "") {
-                if ($row[1] == "Vertretung" || $row[1] == "Sondereins." || $row[1] == "Raum-Vtr." ||$row[1] == "Raumänderung" || $row[1] == "Betreuung" || $row[1] == "Statt-Vertretung" || $row[1] == "Lehrertausch" || $row[1] == "Trotz Absenz" || $row[1] == "Verlegung") {
+                $vertretungsTypes = array("Vertretung", "Statt-Vertretung", "Unterricht geändert", "Lehrertausch", "Sondereins.", "Raum-Vtr.", "Betreuung", "Trotz Absenz", "Raumänderung", "Verlegung");
+                if (array_search($row[1], $vertretungsTypes) !== false) {
                     $lessons = explode("-", $row[3]);
                     $teacher = explode("→", $row[5]);
                     $subject = explode("→", $row[7]);
@@ -164,9 +165,10 @@ function loadXlsx() {
                         }
                         $event["id"] = generateId($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
 
-                        //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
-                        array_push($vertretung, $event);
-                        createVertRow($event);
+                        if($row[4] != ""){
+                            array_push($vertretung, $event);
+                            createVertRow($event);
+                        }
                     }
 
                     if (!in_array($event["date"], $days)) {
@@ -199,20 +201,20 @@ function loadXlsx() {
                             $event["id"] = generateId($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
 
                             //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
-                            $dateString = str_pad($dateParts[0],2,"0",STR_PAD_LEFT)."-".str_pad($dateParts[1],2,"0",STR_PAD_LEFT)."-2020" ;
-                            $examsInLesson = json_decode(file_get_contents(Config::$url_web."/api/klausuren.php?date=".$dateString."&secret=". Config::$api_secret));
+                            $dateString = str_pad($dateParts[0], 2, "0", STR_PAD_LEFT) . "-" . str_pad($dateParts[1], 2, "0", STR_PAD_LEFT) . "-2020";
+                            $examsInLesson = json_decode(file_get_contents(Config::$url_web . "/api/klausuren.php?date=" . $dateString . "&secret=" . Config::$api_secret));
 
                             $isKLSup = false;
                             $lesson = str_replace(" ", "", $lesson);
-                            foreach ($examsInLesson as $exam){
-                                if($event["teacher"] == $exam->$lesson){
+                            foreach ($examsInLesson as $exam) {
+                                if ($event["teacher"] == $exam->$lesson) {
                                     $isKLSup = true;
                                     $event["info"] = "KL - nicht übertragen";
                                 }
                             }
                             if ($row[4] != "") {
 
-                                if(!$isKLSup){
+                                if (!$isKLSup) {
                                     createVertRow($event);
                                     array_push($vertretung, $event);
 
