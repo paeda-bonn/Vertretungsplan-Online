@@ -165,7 +165,7 @@ function loadXlsx() {
                         }
                         $event["id"] = generateId($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
 
-                        if($row[4] != ""){
+                        if ($row[4] != "" && $row[7] != "---") {
                             array_push($vertretung, $event);
                             createVertRow($event);
                         }
@@ -212,8 +212,7 @@ function loadXlsx() {
                                     $event["info"] = "KL - nicht übertragen";
                                 }
                             }
-                            if ($row[4] != "") {
-
+                            if ($row[4] != "" && $row[7] != "---") {
                                 if (!$isKLSup) {
                                     createVertRow($event);
                                     array_push($vertretung, $event);
