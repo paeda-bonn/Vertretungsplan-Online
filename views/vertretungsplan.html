@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<head>
+    <link href="../assets/css/sm-core-css.css" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link href="../assets/css/vertretungsplan.css" rel="stylesheet" type="text/css">
+    <link href="../assets/css/sm-blue.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/vertretungsplan.css">
+    <title>Vertretungsplan</title>
+</head>
+<body>
+<ul id="main-menu" class="sm sm-blue">
+    <li><a href="?">Vertretungsplan</a></li>
+    <li><a href="">Klausuren</a></li>
+    <li><a href="">Aushang</a></li>
+    <li><a href="n">Admin</a></li>
+    <li>
+        <a href="">Impressum</a>
+    </li>
+    <li>
+        <a href="">Datenschutz</a>
+    </li>
+</ul>
+<h1>Vertretungsplan</h1>
+<p>Bitte achte bei jeder Vertretungsstunde darauf, dass auch wirklich dein Kurs gemeint ist.
+    <br>
+    <span>letzte Aktualisierung: <span id="lastRefreshedContainer">N/A</span></span>
+</p>
+<div id="tableContainer">
+
+</div>
+
+<div style="visibility: hidden">
+
+
+    <div id="dayPreset">
+        <p>
+            <span class="vpfuer">Vertretungsplan f&uuml;r <span class="vpfuerdatum dateContainer">N/A</span></span>
+            <br>
+        </p>
+        <table border="2" class="tablekopf">
+            <tr>
+                <th class="thlplanklasse">Klasse</th>
+                <th class="thlplanstunde">Std.</th>
+                <th class="thlplanfach">Fach</th>
+                <th class="thlplanvfach">Fach neu</th>
+                <th class="thlplanvlehrer">Vert.</th>
+                <th class="thlplanvraum">Raum neu</th>
+                <th class="thlplaninfo">Bemerkung</th>
+            </tr>
+            <tbody>
+            <tr id="vplanRowTemplate">
+                <td class="tdaktionen course">Klasse</td>
+                <td class="tdaktionen lesson">Stunde</td>
+                <td class="tdaktionen subject">Fach</td>
+                <td class="tdaktionen newSubject">Fach neu</td>
+                <td class="tdaktionen newTeacher">Lehrer neu</td>
+                <td class="tdaktionen newRoom">Raum</td>
+                <td class="tdinfo info">Bemerkungen</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div style="height: 10px;">
+    <space></space>
+</div>
+<h4 style="position: fixed;bottom: 0;margin: 0 auto;background-color: white;">
+    <a href="https://github.com/paeda-bonn/Vertretungsplan-Online-PHP/tree/beta" style="color: red">Vertretungsplan
+        BETA</a> - © Copyright 2017 - 2020 Nils Witt
+</h4>
+</body>
+<script src="../assets/js/vertretungsplan.js"></script>
+</html>
