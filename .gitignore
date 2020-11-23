@@ -1,9 +1,12 @@
 /Imported/
 /ImportFiles/
 /config.php
+/dependencies/
+/node_modules/
 
 *.css
 *.css.map
 *.js
 *.js.map
-/dependencies/SimpleXLSX.php
+
+/package-lock.json

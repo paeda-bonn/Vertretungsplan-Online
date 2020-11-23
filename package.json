@@ -1,8 +1,16 @@
 {
-  "name": "Vertretungsplan-Online-PHP",
-  "version": "1.0.0",
+  "name": "vertretungsplan-online",
+  "version": "2.0.0",
   "dependencies": {
     "sass": "^1.29.0",
     "typescript": "^4.1.2"
-  }
+  },
+  "author": "Witt, Nils",
+  "contributors": [
+    {
+      "name": "Nils Witt",
+      "email": "nils@nils-witt.de",
+      "url": "https://github.com/Nils-witt"
+    }
+  ]
 }
