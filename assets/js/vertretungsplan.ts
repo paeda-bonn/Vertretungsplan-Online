@@ -10,9 +10,6 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const api_URL = "https://vplan.moodle-paeda.de/apiBeta/index.php"
-const authKey = "yJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ2cGxhbi5tb29kbGUtcGFlZGEuZGUiLCJhdWQiOiJ2cGxhbi5tb29kbGUtcGFlZGEuZGUiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlcnR5cGUiOiJhZG1pbiJ9.FIHqq-IL7dShts5PRfVi0Pm2m-wXXOWJvPgw2MEUDjjR8So4S3WcXYLqeBShHFifoShEPW9rBkAsY524-tl5Oeyw2TpluccsDZC7HmJS5A1Iqh6JefnolJ1Xoa3fw5mB_9ZEs0OsbYHZFE2Z55Jmmm1diQCIJALCfbOqOqHxatQto-88pFc1tHoUcVSniEWt0F3Ju4o7jP1-uZpRGZDSVstSzG8KKn-wptFXiv8Fxh43lOZaRZr9fM0wWRYwmyKVFL84bq_FiEBrms01k2yyGl86aCmToJhK_aMKhsv94GgAiM9MPdBY6fyGFKktAhtxwJki5lmu8qMHf0n1xGV6YhNDJQCLHdqS6G9uPTwgJbgE9jem46SdJnRD2kRVLCib2O1m1zMKmw9iMa8Yxd-Jzpj8gJSsVv5KIS5icse01zClCUDlxsIohyD_3XH-sUftQk9yMir_OcEsR4cu0bWp_aiNjW9BV2X0w2SVgxa2vQjHUjkXzrtT9fiyWa56KXLyf22_M-aoOe4wE9kuyaauoFrFyrLxrJ-Cb5igPZ3GHVS9RR-DWYUxYPcX5tY-YiCF8Qs7rmJ1eEMSmOpKiAcnEhK82nYDDQeaLMG06dBj9XYe4Dc5uq6ge1Z9l3nAPRF5pTby1JMfCdAm3m8quN6hBi89lEBmAu__BBHKk5As4x4";
-
 const orderBy = ["Kurs","Stunde"];
 
 function getWeekday(weekday) {
@@ -38,7 +35,7 @@ function timeDisplay(time) {
 
 async function loadVplan() {
     //TODO set last refreshed
-    let activeDays = await loadActiveDays();
+    let activeDays = await loadVplanActiveDays();
     for (let i = 0; i < activeDays.length; i++) {
         let date = activeDays[i];
         if (date != "") {
@@ -50,7 +47,7 @@ async function loadVplan() {
 
             let eventsContainer = dayContainer.getElementsByTagName('tbody').item(1);
             eventsContainer.innerHTML = "";
-            let events = await fetchByDay(date);
+            let events = await fetchVplanByDay(date);
             events.sort(function (e1, e2) {
                 if (e1["Kurs"] < e2["Kurs"]) {
                     return -1;
@@ -104,36 +101,6 @@ async function loadVplan() {
             }
         }
     }
-}
-
-
-async function loadActiveDays() {
-    let myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ2cGxhbi5tb29kbGUtcGFlZGEuZGUiLCJhdWQiOiJ2cGxhbi5tb29kbGUtcGFlZGEuZGUiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlcnR5cGUiOiJhZG1pbiJ9.FIHqq-IL7dShts5PRfVi0Pm2m-wXXOWJvPgw2MEUDjjR8So4S3WcXYLqeBShHFifoShEPW9rBkAsY524-tl5Oeyw2TpluccsDZC7HmJS5A1Iqh6JefnolJ1Xoa3fw5mB_9ZEs0OsbYHZFE2Z55Jmmm1diQCIJALCfbOqOqHxatQto-88pFc1tHoUcVSniEWt0F3Ju4o7jP1-uZpRGZDSVstSzG8KKn-wptFXiv8Fxh43lOZaRZr9fM0wWRYwmyKVFL84bq_FiEBrms01k2yyGl86aCmToJhK_aMKhsv94GgAiM9MPdBY6fyGFKktAhtxwJki5lmu8qMHf0n1xGV6YhNDJQCLHdqS6G9uPTwgJbgE9jem46SdJnRD2kRVLCib2O1m1zMKmw9iMa8Yxd-Jzpj8gJSsVv5KIS5icse01zClCUDlxsIohyD_3XH-sUftQk9yMir_OcEsR4cu0bWp_aiNjW9BV2X0w2SVgxa2vQjHUjkXzrtT9fiyWa56KXLyf22_M-aoOe4wE9kuyaauoFrFyrLxrJ-Cb5igPZ3GHVS9RR-DWYUxYPcX5tY-YiCF8Qs7rmJ1eEMSmOpKiAcnEhK82nYDDQeaLMG06dBj9XYe4Dc5uq6ge1Z9l3nAPRF5pTby1JMfCdAm3m8quN6hBi89lEBmAu__BBHKk5As4x4");
-
-    let requestOptions: any = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-    };
-
-    let res = await fetch(api_URL + "/vertretungsplan/activedays", requestOptions);
-    return await res.json();
-
-}
-
-async function fetchByDay(date: String) {
-
-    let myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ2cGxhbi5tb29kbGUtcGFlZGEuZGUiLCJhdWQiOiJ2cGxhbi5tb29kbGUtcGFlZGEuZGUiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlcnR5cGUiOiJhZG1pbiJ9.FIHqq-IL7dShts5PRfVi0Pm2m-wXXOWJvPgw2MEUDjjR8So4S3WcXYLqeBShHFifoShEPW9rBkAsY524-tl5Oeyw2TpluccsDZC7HmJS5A1Iqh6JefnolJ1Xoa3fw5mB_9ZEs0OsbYHZFE2Z55Jmmm1diQCIJALCfbOqOqHxatQto-88pFc1tHoUcVSniEWt0F3Ju4o7jP1-uZpRGZDSVstSzG8KKn-wptFXiv8Fxh43lOZaRZr9fM0wWRYwmyKVFL84bq_FiEBrms01k2yyGl86aCmToJhK_aMKhsv94GgAiM9MPdBY6fyGFKktAhtxwJki5lmu8qMHf0n1xGV6YhNDJQCLHdqS6G9uPTwgJbgE9jem46SdJnRD2kRVLCib2O1m1zMKmw9iMa8Yxd-Jzpj8gJSsVv5KIS5icse01zClCUDlxsIohyD_3XH-sUftQk9yMir_OcEsR4cu0bWp_aiNjW9BV2X0w2SVgxa2vQjHUjkXzrtT9fiyWa56KXLyf22_M-aoOe4wE9kuyaauoFrFyrLxrJ-Cb5igPZ3GHVS9RR-DWYUxYPcX5tY-YiCF8Qs7rmJ1eEMSmOpKiAcnEhK82nYDDQeaLMG06dBj9XYe4Dc5uq6ge1Z9l3nAPRF5pTby1JMfCdAm3m8quN6hBi89lEBmAu__BBHKk5As4x4");
-
-    let requestOptions: any = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-    };
-    let res = await fetch(api_URL + "/vertretungsplan/vertretungen/date/" + date, requestOptions);
-    return await res.json();
 }
 
 //Wait for Dom ready
