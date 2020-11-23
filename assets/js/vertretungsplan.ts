@@ -12,16 +12,6 @@
 
 const orderBy = ["Kurs","Stunde"];
 
-function getWeekday(weekday) {
-    const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
-    return weekdays[weekday - 1];
-}
-
-function getMonth(month) {
-    const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-    return months[month];
-}
-
 function timeDisplay(time) {
     let timestamp = new Date(time).getTime();
     let date = new Date(timestamp);

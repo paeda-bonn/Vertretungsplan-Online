@@ -25,14 +25,14 @@ function klausurenParse(data) {
     for (let entry in data) {
         let exam = data[entry];
 
-        if(exam["date"] != date){
+        if (exam["date"] != date) {
             let dayHeader = <HTMLTableSectionElement>document.getElementById('klausurenDayHeaderTemplate').cloneNode(true);
             container.append(dayHeader)
-            dayHeader.getElementsByClassName('weekday').item(0).innerHTML = klausurenGetWeekday(exam["date"]).substr(0,2);
+            dayHeader.getElementsByClassName('weekday').item(0).innerHTML = getWeekdayByDate(exam["date"]).substr(0, 2);
             dayHeader.getElementsByClassName('date').item(0).innerHTML = klausurenDatum(exam["date"]);
             date = exam["date"];
             grade = exam["grade"];
-        }else if(exam["grade"] != grade){
+        } else if (exam["grade"] != grade) {
             container.append(document.getElementById('gradeSpaceholderTemplate').cloneNode(true));
             grade = exam["grade"];
         }
@@ -59,7 +59,7 @@ function klausurenParse(data) {
         courseTd.style.color = color;
         teacherTd.style.color = color;
 
-        timeFrameTd.innerText = exam["from"].substr(0,5) + "-" + exam["to"].substr(0,5);
+        timeFrameTd.innerText = exam["from"].substr(0, 5) + "-" + exam["to"].substr(0, 5);
         teacherTd.innerHTML = exam["teacher"];
         roomTd.innerHTML = exam["room"];
 
@@ -69,7 +69,7 @@ function klausurenParse(data) {
                 let column = <HTMLTableRowElement>eventRow.getElementsByClassName("r" + supervisorsKey).item(0);
                 column.innerText = exam["supervisors"][supervisorsKey];
 
-            }catch (e){
+            } catch (e) {
                 console.log(e);
             }
         }
@@ -89,17 +89,6 @@ function klausurenDatum(datum) {
     let month = date.getMonth();
     let year = date.getFullYear();
     return day + "." + (month + 1) + "." + year;
-}
-
-function klausurenGetWeekday(datum) {
-    let date = new Date(datum);
-    let weekday = date.getDay();
-    return getWeekday(weekday);
-}
-
-function getWeekday(weekday) {
-    const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
-    return weekdays[weekday - 1];
 }
 
 //Wait for Dom ready
