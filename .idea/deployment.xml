@@ -11,6 +11,11 @@
             <excludedPath path="/online/Imported" />
             <excludedPath path="/onlineBeta/Imported" />
             <excludedPath path="/onlineBeta/node_modules" />
+            <excludedPath path="/onlineBeta/tsconfig.json" />
+            <excludedPath path="/onlineBeta/README.md" />
+            <excludedPath path="/onlineBeta/package.json" />
+            <excludedPath path="/onlineBeta/package-lock.json" />
+            <excludedPath path="/onlineBeta/LICENSE" />
           </excludedPaths>
         </serverdata>
       </paths>
