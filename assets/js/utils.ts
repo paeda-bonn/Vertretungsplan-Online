@@ -9,17 +9,19 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
+/*
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOMContentLoaded");
     load();
 });
 
+
+
 function load() {
     loadActive();
     loadPresets();
 }
-
+*/
 function textAreaAdjust(textarea) {
     textarea.style.height = "1px";
     textarea.style.height = (3 + textarea.scrollHeight) + "px";
@@ -37,5 +39,21 @@ function resetInput() {
     let web0content2 = <HTMLInputElement>document.getElementById('web.0.content2');
     web0content.value = "";
     web0content2.value = ""
+}
+
+function getWeekday(weekday) {
+    const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+    return weekdays[weekday - 1];
+}
+
+function getWeekdayByDate(datum) {
+    let date = new Date(datum);
+    let weekday = date.getDay();
+    return getWeekday(weekday);
+}
+
+function getMonth(month) {
+    const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+    return months[month];
 }
 
