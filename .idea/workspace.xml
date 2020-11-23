@@ -20,16 +20,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bc81001a-1e07-48bc-a4c1-e12f554d75c8" name="Default Changelist" comment="updated aushang Admin for new auth process">
-      <change afterPath="$PROJECT_DIR$/views/vertretungsplan.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/js/klausurplan.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/js/vertretungsplan.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/klausuren.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/web.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/web.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/klausuren.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/klausuren.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.dist.php" beforeDir="false" afterPath="$PROJECT_DIR$/config.dist.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/subsites/adminKlausuren.php" beforeDir="false" afterPath="$PROJECT_DIR$/subsites/adminKlausuren.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/subsites/klausuren.php" beforeDir="false" afterPath="$PROJECT_DIR$/subsites/klausuren.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/subsites/adminUntis.php" beforeDir="false" afterPath="$PROJECT_DIR$/subsites/adminUntis.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlhttp/xmlhttpAushang.php" beforeDir="false" afterPath="$PROJECT_DIR$/xmlhttp/xmlhttpAushang.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
   </component>
   <component name="ComposerSettings">
     <execution />
@@ -38,6 +53,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="tsconfig.json" />
+        <option value="HTML File" />
+        <option value="package.json" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -47,8 +65,16 @@
         <option value="NIls WItt &lt;nils@nils-witt.de&gt;" />
       </list>
     </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SIGN_OFF_COMMIT" value="true" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
   </component>
   <component name="ProjectId" id="1jhXcJq6xfZ7TnPd6JH5OINnHk7" />
   <component name="ProjectViewState">
@@ -57,6 +83,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
@@ -64,9 +91,24 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="watcher.settings" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -77,6 +119,11 @@
       <option name="presentableId" value="Default" />
       <updated>1604257375384</updated>
       <workItem from="1604257376636" duration="1327000" />
+      <workItem from="1605796094001" duration="13000" />
+      <workItem from="1605967277534" duration="616000" />
+      <workItem from="1606051626960" duration="3483000" />
+      <workItem from="1606073622764" duration="3912000" />
+      <workItem from="1606149446956" duration="2016000" />
     </task>
     <task id="LOCAL-00001" summary="Switched from basic auth to session based">
       <created>1604257864395</created>
@@ -146,6 +193,14 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/assets/js/vertretungsplan.js.map" />
+        <option value="$PROJECT_DIR$/assets/js/vertretungsplan.js" />
+        <option value="$PROJECT_DIR$/assets/js/klausurplan.js" />
+        <option value="$PROJECT_DIR$/assets/js/klausurplan.js.map" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -157,6 +212,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Switched from basic auth to session based" />
@@ -171,10 +227,15 @@
     <option name="LAST_COMMIT_MESSAGE" value="updated aushang Admin for new auth process" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="880" y="373" key="#Deployment" timestamp="1604257500806">
-      <screen x="0" y="23" width="2560" height="1369" />
+    <state x="880" y="373" key="#Deployment" timestamp="1606063014101">
+      <screen x="0" y="25" width="2560" height="1361" />
     </state>
     <state x="880" y="373" key="#Deployment/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604257500806" />
+    <state x="880" y="373" key="#Deployment/2560.118.1920.1055/0.25.2560.1361@0.25.2560.1361" timestamp="1606063014101" />
+    <state x="922" y="382" key="#Options" timestamp="1606074771390">
+      <screen x="0" y="25" width="2560" height="1361" />
+    </state>
+    <state x="922" y="382" key="#Options/2560.118.1920.1055/0.25.2560.1361@0.25.2560.1361" timestamp="1606074771390" />
     <state x="860" y="283" key="CommitChangelistDialog2" timestamp="1604257756801">
       <screen x="0" y="23" width="2560" height="1369" />
     </state>
@@ -183,18 +244,32 @@
       <screen x="0" y="23" width="2560" height="1369" />
     </state>
     <state x="256" y="149" key="DiffContextDialog/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604257613411" />
+    <state x="100" y="125" width="2360" height="1161" key="DirDiffDialog" timestamp="1606051797369">
+      <screen x="0" y="25" width="2560" height="1361" />
+    </state>
+    <state x="100" y="125" width="2360" height="1161" key="DirDiffDialog/2560.118.1920.1055/0.25.2560.1361@0.25.2560.1361" timestamp="1606051797369" />
+    <state x="939" y="488" key="EditFileWatcherDialog" timestamp="1606149787782">
+      <screen x="0" y="25" width="2560" height="1361" />
+    </state>
+    <state x="939" y="488" key="EditFileWatcherDialog/2560.118.1920.1055/0.25.2560.1361@0.25.2560.1361" timestamp="1606149787782" />
+    <state x="1101" y="633" key="NewPhpFileDialog" timestamp="1606073696885">
+      <screen x="0" y="25" width="2560" height="1361" />
+    </state>
+    <state x="1101" y="633" key="NewPhpFileDialog/2560.118.1920.1055/0.25.2560.1361@0.25.2560.1361" timestamp="1606073696885" />
     <state x="1013" y="417" key="RollbackChangesDialog" timestamp="1604258399895">
       <screen x="0" y="23" width="2560" height="1369" />
     </state>
     <state x="1013" y="417" key="RollbackChangesDialog/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604258399895" />
-    <state x="789" y="346" key="SettingsEditor" timestamp="1604258517809">
-      <screen x="0" y="23" width="2560" height="1369" />
+    <state x="789" y="346" key="SettingsEditor" timestamp="1606149777803">
+      <screen x="0" y="25" width="2560" height="1361" />
     </state>
     <state x="789" y="346" key="SettingsEditor/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604258517809" />
-    <state x="880" y="447" key="Vcs.Push.Dialog.v2" timestamp="1604258022285">
-      <screen x="0" y="23" width="2560" height="1369" />
+    <state x="789" y="346" key="SettingsEditor/2560.118.1920.1055/0.25.2560.1361@0.25.2560.1361" timestamp="1606149777803" />
+    <state x="880" y="447" key="Vcs.Push.Dialog.v2" timestamp="1606063025049">
+      <screen x="0" y="25" width="2560" height="1361" />
     </state>
     <state x="880" y="447" key="Vcs.Push.Dialog.v2/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604258022285" />
+    <state x="880" y="447" key="Vcs.Push.Dialog.v2/2560.118.1920.1055/0.25.2560.1361@0.25.2560.1361" timestamp="1606063025049" />
     <state x="1123" y="613" key="WebDeployment.AddServerDialog.v.1" timestamp="1604257455780">
       <screen x="0" y="23" width="2560" height="1369" />
     </state>
@@ -203,5 +278,26 @@
       <screen x="0" y="23" width="2560" height="1369" />
     </state>
     <state x="1187" y="445" key="ftp.server.browser/2560.116.1920.1057/0.23.2560.1369@0.23.2560.1369" timestamp="1604257499752" />
+  </component>
+  <component name="com.vaadin.designer2.intellij.settings.SizePresetsSettingsComponent">
+    <option name="sizePresets">
+      <list>
+        <SizePreset>
+          <option name="caption" value="Phone" />
+          <option name="height" value="568" />
+          <option name="width" value="320" />
+        </SizePreset>
+        <SizePreset>
+          <option name="caption" value="Tablet" />
+          <option name="height" value="1024" />
+          <option name="width" value="768" />
+        </SizePreset>
+        <SizePreset>
+          <option name="caption" value="Desktop" />
+          <option name="height" value="900" />
+          <option name="width" value="1440" />
+        </SizePreset>
+      </list>
+    </option>
   </component>
 </project>

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="paeda" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="Netcup" remoteFilesAllowedToDisappearOnAutoupload="false" autoUploadExternalChanges="true">
     <serverData>
-      <paths name="paeda">
+      <paths name="Netcup">
         <serverdata>
           <mappings>
-            <mapping deploy="/online" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/onlineBeta" local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
             <excludedPath path="/online/Imported" />
+            <excludedPath path="/onlineBeta/Imported" />
+            <excludedPath path="/onlineBeta/node_modules" />
           </excludedPaths>
         </serverdata>
       </paths>
