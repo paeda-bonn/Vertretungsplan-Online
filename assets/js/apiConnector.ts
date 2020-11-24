@@ -92,6 +92,34 @@ async function importKlausuren() {
     });
 }
 
+async function importUntis() {
+    return new Promise(async (resolve, reject) => {
+        let res;
+        try {
+            let headers = new Headers();
+            headers.append("Authorization", "Bearer " + token);
+
+            let requestOptions: any = {
+                method: 'GET',
+                headers: headers,
+                redirect: 'follow'
+            };
+
+            res = await fetch("/onlineBeta/subsites/adminUntis.php", requestOptions);
+        } catch (e) {
+            console.log(e);
+        }
+        if (res.status === 200) {
+            resolve(await res.text());
+        } else if (res.status == 401) {
+            authError();
+            return [];
+        } else {
+            reject();
+        }
+    });
+}
+
 async function loadDataAushang(): Promise<any[]> {
     return new Promise(async (resolve, reject) => {
         let res: Response;

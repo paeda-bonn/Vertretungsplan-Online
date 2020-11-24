@@ -72,25 +72,6 @@ $lessons[7] = array();
 $lessons[7]["begin"] = "13:15";
 $lessons[7]["end"] = "14:00";
 
-function curlToApi($json, $urlargs)
-{
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => Config::$url_api . "/klausuren.php?$urlargs",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "GET",
-        CURLOPT_POSTFIELDS => $json,
-        CURLOPT_HTTPHEADER => array(
-            "cache-control: no-cache"
-        ),
-    ));
-    return curl_exec($curl);
-}
-
 $tableHead = "<tr><th>Zeile</th><th>Datum</th><th>Anzeigen</th><th>Von</th><th>Bis</th><th>Stufe</th><th>Kurs</th><th>Raum</th><th>Lehrer</th><th>INFO</th></tr>";
 
 $tableALL = "<table id='all'>" . $tableHead;
@@ -331,7 +312,7 @@ function xmlToArray($xml)
 
     return $data;
 }
-$xml = simplexml_load_file(__DIR__ . '/../ImportFiles/klausuren.xml');
+$xml = simplexml_load_file(__DIR__ . '/../../online/ImportFiles/klausuren.xml');
 
 //DELETE all exams
 $curl = curl_init();
@@ -374,15 +355,11 @@ curl_setopt_array($curl, array(
 $response = curl_exec($curl);
 
 curl_close($curl);
-echo $response;
 
+echo "<h1>Completed</h1>";
 
-//$response = curlToApi(json_encode(array($insert)), "secret=".Config::$api_secret."&mode=edit");
-
-//echo "<h1>Completed</h1>";
-
-//echo "<h2>Alle (" . $all . "): </h2>";
-//echo $tableALL;
+echo "<h2>Alle (" . $all . "): </h2>";
+echo $tableALL;
 ?>
 
 
