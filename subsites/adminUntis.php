@@ -1,4 +1,5 @@
 <?php
+require_once('../dependencies/SimpleXLSX.php');
 /*
  * MIT License
  *
@@ -11,32 +12,45 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-if (!empty($config)) {
-    $secret = $config->api_secret;
+const apiUrl = "https://vplan.moodle-paeda.de/apiBeta/index.php";
+function authTest($apiUrl)
+{
+    $curl = curl_init();
+
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $apiUrl . '/vertretungsplan',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: ' . $_SERVER["HTTP_AUTHORIZATION"]
+        ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    if ($response == "401") {
+        http_response_code(401);
+        die("401");
+    } else {
+        return;
+    }
 }
+
+authTest(apiUrl);
+
+
 $supervisonTimes = array("0/1" => "Früh", "2/3" => "1. Pause", "4/5" => "2. Pause");
 $supervisonTimesKeys = array("0/1", "2/3", "4/5");
 
-function curlToApi($json, $urlargs){
-
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => Config::$url_api . "/vertretungsplan.php?" . $urlargs,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "GET",
-        CURLOPT_POSTFIELDS => $json,
-        CURLOPT_HTTPHEADER => array(
-            "cache-control: no-cache"
-        ),
-    ));
-    return curl_exec($curl);
-}
-
-function generateId($date, $kurs, $stunde, $teacher){
+function generateId($date, $kurs, $stunde, $teacher)
+{
 
     $timestamp = strtotime($date);
     $kursex = explode("/", str_replace(' ', '', $kurs));
@@ -86,25 +100,30 @@ function createVertRow($vertretung)
     echo $vertretung["info"];
     echo "</td>";
     echo "</tr>";
+
 }
 
-function loadXlsx() {
+function loadXlsx()
+{
     global $supervisonTimes, $supervisonTimesKeys, $secret;
     $days = array();
     $i = 1;
     $vertretung = array();
     $aufsichten = array();
 
-    copy(__DIR__ . '/../ImportFiles/Untis.xlsx', __DIR__ . '/../Imported/Untis-' . date("Y-m-d-H-i-s") . '_' . rand(10000, 999999) . '.xlsx');
+    $sourcePath = __DIR__ . '/../../online/ImportFiles/Untis.xlsx';
+    copy($sourcePath, __DIR__ . '/../Imported/Untis-' . date("Y-m-d-H-i-s") . '_' . rand(10000, 999999) . '.xlsx');
 
-    $refreshed = date('d.m.Y H:i', filemtime(__DIR__ . '/../ImportFiles/Untis.xlsx'));
-    if ($xlsx = SimpleXLSX::parse(__DIR__ . '/../ImportFiles/Untis.xlsx')) {
+    $refreshed = date('d.m.Y H:i', filemtime($sourcePath));
+    if ($xlsx = SimpleXLSX::parse($sourcePath)) {
         $rowNum = 1;
+
         foreach ($xlsx->rows() as $row) {
             foreach ($row as $key => $value) {
                 $removeSequences = array("<s>", "</s>");
                 $row[$key] = str_replace($removeSequences, "", $value);
             }
+
             echo "<tr>";
             echo "<td>";
             echo $rowNum;
@@ -116,7 +135,7 @@ function loadXlsx() {
             }
             echo "</tr>";
 
-            //echo "ROW:" . $rowNum . json_encode($row) . "<br>\n";
+
             if ($row[0] != "") {
                 $vertretungsTypes = array("Vertretung", "Statt-Vertretung", "Unterricht geändert", "Lehrertausch", "Sondereins.", "Raum-Vtr.", "Betreuung", "Trotz Absenz", "Raumänderung", "Verlegung");
                 if (array_search($row[1], $vertretungsTypes) !== false) {
@@ -202,16 +221,10 @@ function loadXlsx() {
 
                             //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
                             $dateString = str_pad($dateParts[0], 2, "0", STR_PAD_LEFT) . "-" . str_pad($dateParts[1], 2, "0", STR_PAD_LEFT) . "-2020";
-                            $examsInLesson = json_decode(file_get_contents(Config::$url_web . "/api/klausuren.php?date=" . $dateString . "&secret=" . Config::$api_secret));
+                            //$examsInLesson = json_decode(file_get_contents(Config::$url_web . "/api/klausuren.php?date=" . $dateString . "&secret=" . Config::$api_secret));
 
                             $isKLSup = false;
                             $lesson = str_replace(" ", "", $lesson);
-                            foreach ($examsInLesson as $exam) {
-                                if ($event["teacher"] == $exam->$lesson) {
-                                    $isKLSup = true;
-                                    $event["info"] = "KL - nicht übertragen";
-                                }
-                            }
                             if ($row[4] != "" && $row[7] != "---") {
                                 if (!$isKLSup) {
                                     createVertRow($event);
@@ -284,104 +297,94 @@ function loadXlsx() {
                     array_push($aufsichten, $event);
                 }
             }
+
             $rowNum++;
         }
+
     } else {
         echo SimpleXLSX::parseError();
     }
 
-
     $output = array();
-    $data = array();
-    $data["mode"] = "insert";
-    $data["type"] = "vertretungen";
+    $output["vertretungen"] = $vertretung;
+    $output["days"] = $days;
+    $output["aufsichten"] = $aufsichten;
 
-
-    $data["data"] = $vertretung;
-    $data["days"] = $days;
-
-    $output[] = $data;
-
-    $dates = "";
-    foreach ($days as $day) {
-        if ($i == 0) {
-            $dates = $day;
-            $i = 1;
-        } else {
-            $dates .= "," . $day;
-        }
-    }
-
-
-    $data = array();
-    $data["mode"] = "insert";
-    $data["type"] = "aufsichten";
-    $data["data"] = $aufsichten;
-
-    $output[] = $data;
-
-
-    $output[] = array("mode" => "update", "type" => "config", "data" => array("activeDates" => $dates, "lastRefreshed" => $refreshed));
     return $output;
 }
+
 ?>
     <table>
         <tbody>
         <?php
+
         $insert = loadXlsx();
+
         ?>
-        </tbody>
+      </tbody>
     </table>
 
 <?php
-$i = 0;
-foreach ($insert[0]["days"] as $day) {
-    if ($i == 0) {
-        $dates = $day;
-        $i = 1;
-    } else {
-        $dates .= "," . $day;
-    }
-}
 
-$data = curlToApi("", "secret=" . Config::$api_secret . "&dates=" . $dates);
-$activeData = json_decode($data, true);
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => apiUrl.'/vertretungsplan/vertretungen/date/',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'DELETE',
+    CURLOPT_POSTFIELDS => json_encode($insert["days"]),
+    CURLOPT_HTTPHEADER => array(
+        'Authorization: '. $_SERVER["HTTP_AUTHORIZATION"],
+        'Content-Type: application/json'
+    ),
+));
 
-$delete = array();
+$response = curl_exec($curl);
+curl_close($curl);
 
-if (isset($activeData["data"]["vertretungen"])) {
-    $activeIds = array();
-    $deleteVert = array();
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => apiUrl.'/vertretungsplan/activedates/',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_POSTFIELDS => json_encode($insert["days"]),
+    CURLOPT_HTTPHEADER => array(
+        'Authorization: '. $_SERVER["HTTP_AUTHORIZATION"],
+        'Content-Type: application/json'
+    ),
+));
 
-    foreach ($activeData["data"]["vertretungen"] as $dates) {
-        foreach ($dates as $event) {
-            $activeIds[] = $event["id"];
-        }
-    }
+$response = curl_exec($curl);
+curl_close($curl);
 
-    $deleteVert["mode"] = "delete";
-    $deleteVert["type"] = "vertretungen";
-    $deleteVert["data"] = $activeIds;
+$curl = curl_init();
 
-    $response = curlToApi(json_encode(array($deleteVert)), "secret=" . Config::$api_secret . "&mode=edit");
+curl_setopt_array($curl, array(
+    CURLOPT_URL => apiUrl.'/vertretungsplan/vertretungen/',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_POSTFIELDS => json_encode($insert["vertretungen"]),
+    CURLOPT_HTTPHEADER => array(
+        'Authorization: '. $_SERVER["HTTP_AUTHORIZATION"],
+        'Content-Type: application/json'
+    ),
+));
 
-}
+$response = curl_exec($curl);
+curl_close($curl);
 
-if (isset($activeData["data"]["aufsichten"])) {
-    $activeIds = array();
-    $deleteAufsichten = array();
-
-    foreach ($activeData["data"]["aufsichten"] as $dates) {
-        foreach ($dates as $event) {
-            $activeIds[] = $event["id"];
-        }
-    }
-
-    $deleteAufsichten["mode"] = "delete";
-    $deleteAufsichten["type"] = "aufsichten";
-    $deleteAufsichten["data"] = $activeIds;
-
-    $response = curlToApi(json_encode(array($deleteAufsichten)), "secret=" . Config::$api_secret . "&mode=edit");
-}
-$inserted = curlToApi(json_encode($insert), "secret=" . Config::$api_secret . "&mode=edit");
 echo "<h1>Completed</h1>";
