@@ -11,37 +11,38 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-?>
-<script>
-    function toggleTable(table) {
-        let cv = document.getElementById(table).style.visibility;
-        if (cv == "collapse") {
-            document.getElementById(table).style.visibility = "visible";
-        } else {
-            document.getElementById(table).style.visibility = "collapse";
-        }
+const apiUrl = "https://vplan.moodle-paeda.de/apiBeta/index.php";
+function authTest($apiUrl){
+    $curl = curl_init();
+
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => $apiUrl.'/vertretungsplan',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: '. $_SERVER["HTTP_AUTHORIZATION"]
+        ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    if($response == "401"){
+        http_response_code(401);
+        die("401");
+    }else{
+        return;
     }
-
-    function toggleTableAll() {
-        toggleTable('all')
-    }
-
-    function toggleTableErr() {
-        toggleTable('err')
-    }
-
-    function toggleTableIgn() {
-        toggleTable('ingnored')
-    }
-
-    function toggleTableSub() {
-        toggleTable('submitted')
-    }
+}
+authTest(apiUrl);
 
 
-</script>
-
-<?php
 $lessons = array();
 $lessons[1] = array();
 $lessons[1]["begin"] = "07:50";
@@ -92,7 +93,7 @@ function curlToApi($json, $urlargs)
 
 $tableHead = "<tr><th>Zeile</th><th>Datum</th><th>Anzeigen</th><th>Von</th><th>Bis</th><th>Stufe</th><th>Kurs</th><th>Raum</th><th>Lehrer</th><th>INFO</th></tr>";
 
-$tableALL = "<table id='all' style='visibility: collapse'>" . $tableHead;
+$tableALL = "<table id='all'>" . $tableHead;
 $tableErr = "<table id='err' style='visibility: collapse'>" . $tableHead;
 $tableIgnored = "<table id='ingnored' style='visibility: collapse'>" . $tableHead;
 $tableSubmitted = "<table id='submitted' style='visibility: collapse'>" . $tableHead;
@@ -161,6 +162,7 @@ function xmlToArray($xml)
 
         $lehrer = $xml->klausur[$i]->lehrer;
         $raum = $xml->klausur[$i]->raum;
+
         $eins = $xml->klausur[$i]->eins;
         $zwei = $xml->klausur[$i]->zwei;
         $drei = $xml->klausur[$i]->drei;
@@ -169,35 +171,15 @@ function xmlToArray($xml)
         $sechs = $xml->klausur[$i]->sechs;
         $sieben = $xml->klausur[$i]->sieben;
 
+
         $unixdatum = ($exceldatum - 25569) * 86400;
-        $datum = gmdate("d-m-Y", $unixdatum);
+        $datum = gmdate("Y-m-d", $unixdatum);
 
         if ($std == "") {
             $std = "-";
         }
         if ($raum == "") {
             $raum = "-";
-        }
-        if ($eins == "") {
-            $eins = "-";
-        }
-        if ($zwei == "") {
-            $zwei = "-";
-        }
-        if ($drei == "") {
-            $drei = "-";
-        }
-        if ($vier == "") {
-            $vier = "-";
-        }
-        if ($funf == "") {
-            $funf = "-";
-        }
-        if ($sechs == "") {
-            $sechs = "-";
-        }
-        if ($sieben == "") {
-            $sieben = "-";
         }
 
         $time = convertStdToTime($std, $lessons);
@@ -210,7 +192,7 @@ function xmlToArray($xml)
         $row .= "<td>" . ($i + 2) . "</td>";
 
         $dataset["date"] = json_decode(json_encode($datum), true);
-        if ($dataset["date"] == "30-12-1899") {
+        if ($dataset["date"] == "1899-12-30") {
             $row .= "<td style='background-color: red'>" . "Err" . "</td>";
             $dpRow = true;
             $invalid++;
@@ -224,10 +206,14 @@ function xmlToArray($xml)
             $valid++;
         }
 
-        $dataset["excelDate"] = json_decode(json_encode($exceldatum), true)[0];
-        $dataset["unixtime"] = json_decode(json_encode($unixdatum), true);
+        //$dataset["excelDate"] = json_decode(json_encode($exceldatum), true)[0];
+        //$dataset["unixtime"] = json_decode(json_encode($unixdatum), true);
 
-        $dataset["display"] = json_decode(json_encode($anzeigen), true)[0];
+        if(json_decode(json_encode($anzeigen), true)[0] == "x"){
+            $dataset["active"] = true;
+        }else{
+            $dataset["active"] = false;
+        }
         $row .= "<td>" . $dataset["display"] . "</td>";
 
 
@@ -262,29 +248,7 @@ function xmlToArray($xml)
             }
         }
 
-        /*
-                if(isTime(json_decode(json_encode($von),true))){
-                    $dataset["from"] = json_decode(json_encode($von),true);
-                    $row .= "<td >".$dataset["from"]."</td>";
-                }else{
-                    $dataset["from"] = "00:00:00";
-                    $row .= "<td style='background-color: red'>"."ERR"."</td>";
-                    $dpRow = true;
-                    $invalid++;
-                }
-                if(isTime(json_decode(json_encode($bis),true))){
-                    $dataset["to"] = $bis;
-                    $row .= "<td>".$dataset["to"]."</td>";
-                    $valid++;
-                }else{
-                    $dataset["to"] = "16:00:00";
-                    $row .= "<td style='background-color: red'>ERR</td>";
-                    $dpRow = true;
-                    $invalid++;
-                }
-        */
-
-        $dataset["lesson"] = json_decode(json_encode($std), true)[0];
+        //$dataset["lesson"] = json_decode(json_encode($std), true)[0];
         $dataset["grade"] = json_decode(json_encode($stufe), true)[0];
         if ($dataset["grade"] == "") {
             $row .= "<td style='background-color: red'>" . "ERR" . "</td>";
@@ -316,14 +280,16 @@ function xmlToArray($xml)
             $row .= "<td>" . $dataset["room"] . "</td>";
             $valid++;
         }
-        $dataset["lessonOne"] = json_decode(json_encode($eins), true)[0];
-        $dataset["lessonTwo"] = json_decode(json_encode($zwei), true)[0];
-        $dataset["lessonThree"] = json_decode(json_encode($drei), true)[0];
-        $dataset["lessonFour"] = json_decode(json_encode($vier), true)[0];
-        $dataset["lessonFive"] = json_decode(json_encode($funf), true)[0];
-        $dataset["lessonSix"] = json_decode(json_encode($sechs), true)[0];
-        $dataset["lessonSeven"] = json_decode(json_encode($sieben), true)[0];
 
+        $dataset["supervisors"] = ["1" => "a"];
+
+        $dataset["supervisors"]["1"] = json_decode(json_encode($eins), true)[0];
+        $dataset["supervisors"]["2"] = json_decode(json_encode($zwei), true)[0];
+        $dataset["supervisors"]["3"] = json_decode(json_encode($drei), true)[0];
+        $dataset["supervisors"]["4"] = json_decode(json_encode($vier), true)[0];
+        $dataset["supervisors"]["5"] = json_decode(json_encode($funf), true)[0];
+        $dataset["supervisors"]["6"] = json_decode(json_encode($sechs), true)[0];
+        $dataset["supervisors"]["7"] = json_decode(json_encode($sieben), true)[0];
 
         if (json_decode(json_encode($lehrer), true)[0] != NULL) {
             $dataset["teacher"] = json_decode(json_encode($lehrer), true)[0];
@@ -365,35 +331,58 @@ function xmlToArray($xml)
 
     return $data;
 }
-
 $xml = simplexml_load_file(__DIR__ . '/../ImportFiles/klausuren.xml');
 
+//DELETE all exams
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => apiUrl.'/klausuren/all',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'DELETE',
+    CURLOPT_HTTPHEADER => array(
+        'Authorization: '. $_SERVER["HTTP_AUTHORIZATION"]
+    ),
+));
+$response = curl_exec($curl);
 
-if (true) {
-    $deleteData = array();
+curl_close($curl);
 
-    $deleteData["mode"] = "delete";
-    $deleteData["type"] = "klausuren";
-    $deleteData["data"] = array("%");
+//Add exams from table
+$curl = curl_init();
 
-    $response = curlToApi(json_encode(array($deleteData)), "secret=".Config::$api_secret."&mode=edit");
-}
+curl_setopt_array($curl, array(
+    CURLOPT_URL => apiUrl.'/klausuren/',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_POSTFIELDS => json_encode(xmlToArray($xml)),
+    CURLOPT_HTTPHEADER => array(
+        'Authorization: '. $_SERVER["HTTP_AUTHORIZATION"],
+        'Content-Type: application/json'
+    ),
+));
 
-$insert["mode"] = "insert";
-$insert["type"] = "klausuren";
-$insert["data"] = xmlToArray($xml);
+$response = curl_exec($curl);
 
-$response = curlToApi(json_encode(array($insert)), "secret=".Config::$api_secret."&mode=edit");
-echo "<h1>Completed</h1>";
-echo "<h2>Fehlerhaft (" . $err . "):</h2><button onclick='toggleTableErr()'>Anzeigen</button>";
-echo $tableErr;
-echo "<h2>Nicht übertragen (" . $ignored . "): </h2><button onclick='toggleTableIgn()'>Anzeigen</button>";
-echo $tableIgnored;
-echo "<h2>Übertragen (" . $submitted . "): </h2><button onclick='toggleTableSub()'>Anzeigen</button>";
-echo $tableSubmitted;
+curl_close($curl);
+echo $response;
 
-echo "<h2>Alle (" . $all . "): </h2> <button onclick='toggleTableAll()'>Anzeigen</button>";
-echo $tableALL;
+
+//$response = curlToApi(json_encode(array($insert)), "secret=".Config::$api_secret."&mode=edit");
+
+//echo "<h1>Completed</h1>";
+
+//echo "<h2>Alle (" . $all . "): </h2>";
+//echo $tableALL;
 ?>
 
 
