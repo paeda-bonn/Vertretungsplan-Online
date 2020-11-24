@@ -12,7 +12,7 @@
 const api_url = "https://vplan.moodle-paeda.de/apiBeta/index.php";
 const token = localStorage.getItem("token");
 
-function authError(){
+function authError() {
     localStorage.removeItem("token");
     window.location.href = "/onlineBeta/views/login.html"
 }
@@ -55,10 +55,10 @@ async function loadDataKlausuren() {
 
         if (res.status === 200) {
             resolve(await res.json());
-        }else if(res.status == 401) {
+        } else if (res.status == 401) {
             authError();
             return [];
-        }else {
+        } else {
             reject();
         }
     });
@@ -83,10 +83,10 @@ async function importKlausuren() {
         }
         if (res.status === 200) {
             resolve(await res.text());
-        }else if(res.status == 401) {
+        } else if (res.status == 401) {
             authError();
             return [];
-        }else {
+        } else {
             reject();
         }
     });
@@ -112,12 +112,56 @@ async function loadDataAushang(): Promise<any[]> {
 
         if (res.status === 200) {
             resolve(await res.json());
-        }else if(res.status == 401) {
+        } else if (res.status == 401) {
             authError();
             return [];
-        }else {
+        } else {
             reject();
         }
+    });
+}
+
+function addAushang(aushang) {
+    return new Promise(async (resolve, reject) => {
+
+        let res = await fetch(api_url + "/aushang", {
+            method: 'POST',
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(aushang),
+            redirect: 'follow'
+        });
+        resolve(res);
+    });
+}
+
+function moveAushang(id: number, direction: string) {
+    return new Promise(async (resolve, reject) => {
+
+        let res = await fetch(api_url + '/aushang/id/' + id + '/move/' + direction, {
+            method: 'PUT',
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            redirect: 'follow'
+        });
+        resolve(res);
+    });
+}
+
+function deleteAushangById(id: number) {
+    return new Promise(async (resolve, reject) => {
+
+        let res = await fetch(api_url + "/aushang/id/" + id, {
+            method: 'DELETE',
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            redirect: 'follow'
+        });
+        resolve(res);
     });
 }
 
@@ -141,10 +185,10 @@ async function loadPresetsAushang(): Promise<any[]> {
 
         if (res.status === 200) {
             resolve(await res.json());
-        }else if(res.status == 401) {
+        } else if (res.status == 401) {
             authError();
             return [];
-        }else {
+        } else {
             reject();
         }
     });
@@ -162,17 +206,17 @@ async function loadVplanActiveDays() {
 
     let res = await fetch(api_url + "/vertretungsplan/activedays", requestOptions);
     console.log(res.status)
-    if (res.status == 200){
+    if (res.status == 200) {
         return await res.json();
-    }else if(res.status == 401) {
+    } else if (res.status == 401) {
         authError();
         return [];
-    }else{
+    } else {
         return [];
     }
 }
 
-async function fetchVplanByDay(date: String) {
+async function fetchVplanByDay(date: string) {
     let headers = new Headers();
     headers.append("Authorization", "Bearer " + token);
 
