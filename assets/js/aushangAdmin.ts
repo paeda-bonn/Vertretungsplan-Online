@@ -47,7 +47,12 @@ function createElementRow(dataset, presetId) {
 
     let colorColumn = <HTMLTableCellElement>row.getElementsByClassName('colorColumn').item(0);
     colorColumn.style.backgroundColor = dataset["color"];
-    let colorSelector = <HTMLTableCellElement>colorColumn.getElementsByClassName('colorColumn').item(0);
+    let colorSelector = <HTMLSelectElement> colorColumn.getElementsByTagName('select').item(0);
+    for (let i = 0; i < colorSelector.options.length; i++) {
+        if(colorSelector.options.item(i).value == dataset["color"]){
+            colorSelector.options.item(i).selected = true;
+        }
+    }
 
 
     let deleteButton = <HTMLButtonElement>row.getElementsByClassName('deleteElement').item(0);
