@@ -16,11 +16,10 @@ async function login() {
     let password = (<HTMLInputElement>document.getElementById("password")).value;
 
     try {
-        let token = await requestApiToken(username,password);
-        console.log(token);
-        localStorage.setItem("token",token);
+        let token = await requestApiToken(username, password);
+        localStorage.setItem("token", token);
         window.location.href = "/onlineBeta/views/vertretungsplan.html";
-    }catch (e) {
+    } catch (e) {
         console.error(e);
     }
 
@@ -42,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 
 document.addEventListener("keydown", event => {
-    if(event.key == "Enter"){
+    if (event.key == "Enter") {
         login();
     }
 });
