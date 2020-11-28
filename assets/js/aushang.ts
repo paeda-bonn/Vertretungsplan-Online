@@ -18,12 +18,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         let dataRow = <HTMLTableRowElement>document.getElementById('aushangRowTemplate').cloneNode(true);
         container.append(dataRow);
-        let column = <HTMLTableCellElement> dataRow.getElementsByTagName('td').item(0);
+        let column = <HTMLTableCellElement>dataRow.getElementsByTagName('td').item(0);
         column.innerText = dataset["content"][0];
+        column.style.backgroundColor = dataset["color"];
+
         for (let j = 1; j < dataset["content"].length; j++) {
-            console.log(j);
             column.colSpan = 1;
-            column = <HTMLTableCellElement> column.cloneNode(true);
+            column = <HTMLTableCellElement>column.cloneNode(true);
             dataRow.append(column);
             column.innerText = dataset["content"][j];
         }
