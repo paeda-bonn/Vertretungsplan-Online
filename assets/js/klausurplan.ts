@@ -53,7 +53,6 @@ function klausurenParse(data) {
         let courseTd = <HTMLTableRowElement>eventRow.getElementsByClassName("course").item(0);
         let teacherTd = <HTMLTableRowElement>eventRow.getElementsByClassName("teacher").item(0);
         let roomTd = <HTMLTableRowElement>eventRow.getElementsByClassName("room").item(0);
-        let r1Td = <HTMLTableRowElement>eventRow.getElementsByClassName("r1").item(0);
 
         timeFrameTd.style.color = color;
         courseTd.style.color = color;
@@ -64,7 +63,6 @@ function klausurenParse(data) {
         roomTd.innerHTML = exam["room"];
 
         for (const supervisorsKey in exam["supervisors"]) {
-            console.log(supervisorsKey);
             try {
                 let column = <HTMLTableRowElement>eventRow.getElementsByClassName("r" + supervisorsKey).item(0);
                 column.innerText = exam["supervisors"][supervisorsKey];

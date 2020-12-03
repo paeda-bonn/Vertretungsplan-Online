@@ -233,7 +233,6 @@ async function loadVplanActiveDays() {
     };
 
     let res = await fetch(api_url + "/vertretungsplan/activedays", requestOptions);
-    console.log(res.status)
     if (res.status == 200) {
         return await res.json();
     } else if (res.status == 401) {
