@@ -1,4 +1,4 @@
-/*
+/*!
  * MIT License
  *
  * Copyright (c) 2020. Nils Witt
@@ -11,29 +11,7 @@
  */
 
 
-@media all {
-    html, body {
-        margin-top: 20px;
-        margin-left: 3%;
-        margin-right: 3%;
-        margin-bottom: 20px;
-        padding: 0px;
-    }
 
-    body {
-        background-color: white;
-        color: black;
-        font-family: Helvetica, Arial, Tahoma, sans-serif;
-        font-size: 12px;
-        text-align: left;
-    }
-
-    h1 {
-        font-family: "PT Sans Narrow", "Arial Narrow", Arial, Helvetica, sans-serif;
-        font-weight: bold;
-        color: #1675A1;
-        font-size: 25px;
-    }
 
     .vpfuer {
         font-family: "PT Sans Narrow", "Arial Narrow", Arial, Helvetica, sans-serif;
@@ -65,13 +43,6 @@
     table {
         border-collapse: collapse;
         border-color: black;
-        /*
-        table-layout:fixed;
-        */
-
-        /*
-        width:100%;
-        */
 
         font-size: 12px;
         overflow: hidden;
@@ -83,98 +54,31 @@
 
     .thplanklasse {
         font-size: 12px;
-
-        /*
-        width:100px
-        */
     }
 
     .thplanstunde {
         font-size: 12px;
-        /*
-        width:50px;
-        */
     }
 
     .thplanfach {
         font-size: 12px;
-        /*
-        width:50px;
-        */
     }
 
     .thplanlehrer {
         font-size: 12px;
-        /*
-        width:150px;
-        */
     }
 
     .thplanraum {
         font-size: 12px;
-        /*
-        width:50px;
-        */
     }
 
     .thplaninfo {
         font-size: 12px;
     }
 
-    .thlplanstunde {
-        /*
-        width:20px;
-        */
-    }
-
-    .thlplanfach {
-        /*
-        width:40px;
-        */
-    }
-
-    .thlplanlehrer {
-        /*
-        width:150px;
-        */
-    }
-
-    .thlplanklasse {
-        /*
-        width:100px;
-        */
-    }
-
-    .thlplanvfach {
-        /*
-        width:40px;
-        */
-    }
-
-    .thlplanvlehrer {
-        /*
-        width:150px;
-        */
-    }
-
-    .thlplanvraum {
-        /*
-        width:40px;
-        */
-    }
-
-    .thlplaninfo {
-        /*
-        width:200px;
-        */
-    }
-
     .kopfstunde {
         font-size: 12px;
         font-weight: bold;
-        /*
-        width:50px;
-        */
         text-align: center;
     }
 
@@ -207,14 +111,6 @@
         text-align: left;
     }
 
-    .thkopfabwesend {
-        padding-left: 0px;
-        font-size: 12px;
-        /*
-        width:150px;
-        */
-    }
-
     .thabwesend {
         font-size: 12px;
     }
@@ -245,4 +141,4 @@
         margin-bottom: 0%;
         padding: 0px;
     }
-}
+

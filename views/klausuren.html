@@ -13,50 +13,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="../assets/css/sm-core-css.css" rel="stylesheet" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <link href="../assets/css/klausuren.css" rel="stylesheet" type="text/css">
-    <link href="../assets/css/sm-blue.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="../assets/css/vertretungsplan.css">
+    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
+
     <title>Vertretungsplan</title>
 </head>
 <body>
-<ul id="main-menu" class="sm sm-blue">
-    <li><a href="vertretungsplan.html">Vertretungsplan</a></li>
-    <li><a href="klausuren.html">n&auml;chste Klausuren</a></li>
-    <li><a href="aushang.html">Aushang</a></li>
-    <li><a href="admin.html">Admin</a></li>
-    <li>
-        <a href=>Impressum</a>
-    </li>
-    <li>
-        <a href=>Datenschutz</a>
-    </li>
-</ul>
-<table style="border-collapse:collapse;table-layout:fixed;width:495px">
-    <tr class="xl74" height="24" style="height:18.0pt">
-        <td style="height:18.0pt;width:70pt"></td>
-        <td style="width:70pt"></td>
-        <td style="width:40pt"></td>
-        <td style="width:5pt"></td>
-        <td style="width:47pt"></td>
-        <td style="width:30pt"></td>
-        <td style="width:30pt"></td>
-        <td style="width:30pt"></td>
-        <td style="width:30pt"></td>
-        <td style="width:30pt"></td>
-        <td style="width:30pt"></td>
-        <td style="width:30pt"></td>
-    </tr>
-    <tr>
-        <td colspan="12" class="xl94" style="height:56.25pt">Der Unterricht bei den aufsichtsf&uuml;hrenden
-            Lehrern findet in den jeweiligen Stunden nicht statt
-        </td>
-    </tr>
-    <tbody id="klausurenTableBody">
 
-    </tbody>
-</table>
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img alt="" class="d-inline-block align-top" height="40" src="../assets/png/PaedaLogo.png" width="66">
+    </a>
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="vertretungsplan.html">Vertretungsplan</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Klausuren <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="aushang.html">Aushang</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admin.html">Administration</a>
+            </li>
+        </ul>
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Logout</button>
+    </div>
+</nav>
+
+<div class="container">
+    <table style="border-collapse:collapse;table-layout:fixed;width:700px">
+        <tr class="xl74" style="height:18.0pt">
+            <td style="height:18.0pt;width:70pt"></td>
+            <td style="width:70pt"></td>
+            <td style="width:40pt"></td>
+            <td style="width:5pt"></td>
+            <td style="width:47pt"></td>
+            <td style="width:30pt"></td>
+            <td style="width:30pt"></td>
+            <td style="width:30pt"></td>
+            <td style="width:30pt"></td>
+            <td style="width:30pt"></td>
+            <td style="width:30pt"></td>
+            <td style="width:30pt"></td>
+        </tr>
+        <tr>
+            <td class="xl94" colspan="12" style="height:56.25pt">Der Unterricht bei den aufsichtsf&uuml;hrenden
+                Lehrern findet in den jeweiligen Stunden nicht statt
+            </td>
+        </tr>
+        <tbody id="klausurenTableBody">
+
+        </tbody>
+    </table>
+</div>
 
 <div style="visibility: hidden">
     <table>
@@ -66,7 +85,7 @@
             <td colspan="12" style="border-bottom:2.0pt double windowtext">&nbsp;</td>
         </tr>
         <tr style="height:9.0pt"></tr>
-        <tr height="24" style="page-break-before:always;height:18.0pt">
+        <tr style="page-break-before:always;height:18.0pt">
             <td height="24" class="xl68 weekday" style="height:18.0pt">Samstag</td>
             <td class="xl70 date">28.11.2020</td>
             <td></td>
@@ -75,7 +94,7 @@
             <td></td>
             <td colspan="3" class="xl70">Aufsicht</td>
         </tr>
-        <tr height="24" style="height:18.0pt">
+        <tr style="height:18.0pt">
             <td height="24" class="xl69" style="height:18.0pt">Std.</td>
             <td class="xl69">Kurs</td>
             <td class="xl71">Lehrer</td>
@@ -91,11 +110,11 @@
         </tr>
         </tbody>
         <tr id="klausurenRowTamplate">
-            <td height="24" class="xl78 timeframe" style="height:18.0pt; ">7:50-10:50</td>
+            <td class="xl78 timeframe" style="height:18.0pt; ">7:50-10:50</td>
             <td class="xl78 course">DM / D-L1</td>
-            <td class="xl78 teacher">trh (1)</td>
+            <td class="xl78 teacher">tmp (0)</td>
             <td class="xl72"></td>
-            <td class="xl74 room">K</td>
+            <td class="xl74 room">RMS</td>
             <td class="xl74 r1">/</td>
             <td class="xl74 r2">/</td>
             <td class="xl74 r3">/</td>
@@ -109,6 +128,13 @@
     </table>
 </div>
 </body>
+<script crossorigin="anonymous" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 <script src="../assets/js/utils.js"></script>
 <script src="../assets/js/apiConnector.js"></script>
 <script src="../assets/js/klausurplan.js"></script>
