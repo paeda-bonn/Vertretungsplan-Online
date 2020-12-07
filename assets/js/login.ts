@@ -32,7 +32,7 @@ function processForm(e) {
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    if(localStorage.getItem("token") != null){
+    if (localStorage.getItem("token") != null) {
         window.location.href = "vertretungsplan.html";
     }
     let form = <HTMLFormElement>document.getElementById('loginForm');

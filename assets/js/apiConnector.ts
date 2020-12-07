@@ -222,7 +222,7 @@ async function loadPresetsAushang(): Promise<any[]> {
     });
 }
 
-async function loadVplanActiveDays() {
+async function loadVplanActiveDays(): Promise<string[]> {
     let headers = new Headers();
     headers.append("Authorization", "Bearer " + token);
 
@@ -243,7 +243,7 @@ async function loadVplanActiveDays() {
     }
 }
 
-async function fetchVplanByDay(date: string) {
+async function fetchVplanByDay(date: string): Promise<any[]> {
     let headers = new Headers();
     headers.append("Authorization", "Bearer " + token);
 
