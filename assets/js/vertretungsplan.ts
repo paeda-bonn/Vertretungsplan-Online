@@ -10,7 +10,17 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const orderBy = ["Kurs","Stunde"];
+const orderBy = ["Kurs", "Stunde"];
+
+const lessonTimes = {
+    "1": 515,
+    "2": 560,
+    "3": 625,
+    "4": 675,
+    "5": 740,
+    "6": 785,
+    "7": 840,
+}
 
 function timeDisplay(time) {
     let timestamp = new Date(time).getTime();
@@ -25,7 +35,15 @@ function timeDisplay(time) {
 
 async function loadVplan() {
     //TODO set last refreshed
-    let activeDays = await loadVplanActiveDays();
+    let activeDays: string[] = await loadVplanActiveDays();
+    let nowDate = new Date();
+
+    let todayString = nowDate.getFullYear() + "-" + (nowDate.getMonth() + 1).toString().padStart(2, "0") + "-" + nowDate.getDate().toString().padStart(2, "0")
+    if (!activeDays.includes(todayString) && nowDate.getHours() < 16) {
+        activeDays.push(todayString);
+    }
+    activeDays.sort();
+
     for (let i = 0; i < activeDays.length; i++) {
         let date = activeDays[i];
         if (date != "") {
@@ -43,30 +61,39 @@ async function loadVplan() {
                     return -1;
                 } else if (e1["Kurs"] > e2["Kurs"]) {
                     return 1;
-                }else{
+                } else {
                     if (e1["Stunde"] < e2["Stunde"]) {
                         return -1;
                     } else if (e1["Stunde"] > e2["Stunde"]) {
                         return 1;
-                    }else {
+                    } else {
                         return 0;
                     }
                 }
-
             });
 
-            for (let j = 0; j < events.length; j++) {
+            if (todayString == date) {
+                for (let j = 0; j < events.length; j++) {
+                    let event = events[j];
+                    if (lessonTimes[event["Stunde"]] < ((nowDate.getHours() * 60) + nowDate.getMinutes())) {
+                        events.splice(j, 1);
+                        j--;
+                    }
+                }
+            }
 
+            for (let j = 0; j < events.length; j++) {
                 let event = events[j];
-                if(events[j+1] != null){
-                    let next = events[j+1];
-                    if(event["Datum"] == next["Datum"]){
-                        if(event["Kurs"] == next["Kurs"]){
-                            if(event["Fach"] == next["Fach"]){
-                                if(event["FachNew"] == next["FachNew"]){
-                                    if(event["Lehrer"] == next["Lehrer"]){
-                                        if(event["LehrerNeu"] == next["LehrerNeu"]){
-                                            if(event["RaumNew"] == next["RaumNew"]){
+
+                if (events[j + 1] != null) {
+                    let next = events[j + 1];
+                    if (event["Datum"] == next["Datum"]) {
+                        if (event["Kurs"] == next["Kurs"]) {
+                            if (event["Fach"] == next["Fach"]) {
+                                if (event["FachNew"] == next["FachNew"]) {
+                                    if (event["Lehrer"] == next["Lehrer"]) {
+                                        if (event["LehrerNeu"] == next["LehrerNeu"]) {
+                                            if (event["RaumNew"] == next["RaumNew"]) {
                                                 event["Stunde"] = event["Stunde"] + " / " + next["Stunde"];
                                                 j++;
                                             }
@@ -94,6 +121,6 @@ async function loadVplan() {
 }
 
 //Wait for Dom ready
-document.addEventListener("DOMContentLoaded", async () =>{
+document.addEventListener("DOMContentLoaded", async () => {
     await loadVplan();
 });
