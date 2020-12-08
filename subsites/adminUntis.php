@@ -1,5 +1,4 @@
 <?php
-require_once('../dependencies/SimpleXLSX.php');
 /*
  * MIT License
  *
@@ -12,7 +11,24 @@ require_once('../dependencies/SimpleXLSX.php');
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+require_once('../dependencies/SimpleXLSX.php');
+require_once 'Klausur.php';
+require_once 'VplanEntry.php';
+/*
+ * MIT License
+ *
+ * Copyright (c) 2020. Nils Witt
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+
 const apiUrl = "https://vplan.moodle-paeda.de/apiBeta/index.php";
+
 function authTest($apiUrl)
 {
     $curl = curl_init();
@@ -72,319 +88,318 @@ function generateId($date, $kurs, $stunde, $teacher)
     return $id;
 }
 
-function createVertRow($vertretung)
+function formatDate($string)
 {
-
-    echo "<tr style='background-color: lightgreen'>";
-    echo "<td colspan='3'></td>";
-    echo "<td>";
-    echo $vertretung["date"];
-    echo "</td>";
-    echo "<td>";
-    echo $vertretung["lesson"];
-    echo "</td>";
-    echo "<td>";
-    echo $vertretung["class"];
-    echo "</td>";
-    echo "<td>";
-    echo $vertretung["newTeacher"];
-    echo "</td>";
-    echo "<td>";
-    echo $vertretung["newRoom"];
-    echo "</td>";
-    echo "<td>";
-    echo $vertretung["subject"];
-    echo "</td>";
-    echo "<td colspan='2'></td>";
-    echo "<td>";
-    echo $vertretung["info"];
-    echo "</td>";
-    echo "</tr>";
-
+    return date("Y-m-d", strtotime($string . "2020"));
 }
 
-function loadXlsx()
+header('Content-Type: application/json');
+function loadXLSXtoObject($path)
 {
-    global $supervisonTimes, $supervisonTimesKeys, $secret;
-    $days = array();
-    $i = 1;
-    $vertretung = array();
-    $aufsichten = array();
+    $acceptedEntryTypes = ["Betreuung", "Raumänderung", "Entfall", "Klausur", "Vertretung", "Klausur"];
 
-    $sourcePath = __DIR__ . '/../../online/ImportFiles/Untis.xlsx';
-    copy($sourcePath, __DIR__ . '/../Imported/Untis-' . date("Y-m-d-H-i-s") . '_' . rand(10000, 999999) . '.xlsx');
+    $data = array();
+    $data["activeDays"] = [];
 
-    $refreshed = date('d.m.Y H:i', filemtime($sourcePath));
-    if ($xlsx = SimpleXLSX::parse($sourcePath)) {
-        $rowNum = 1;
+    if ($xlsx = SimpleXLSX::parse($path)) {
+        $rows = $xlsx->rows();
+        for ($i = 0; $i < sizeof($rows); $i++) {
+            $row = $rows[$i];
+            if (in_array($row[1], $acceptedEntryTypes)) {
 
-        foreach ($xlsx->rows() as $row) {
-            foreach ($row as $key => $value) {
-                $removeSequences = array("<s>", "</s>");
-                $row[$key] = str_replace($removeSequences, "", $value);
-            }
+                for ($j = 0; $j < sizeof($row); $j++) {
+                    $row[$j] = str_replace("<s>", "", str_replace("</s>", "", $row[$j]));
+                }
+                if (!isset($data[$row[1]])) {
+                    $data[$row[1]] = array();
+                }
 
-            echo "<tr>";
-            echo "<td>";
-            echo $rowNum;
-            echo "</td>";
-            foreach ($row as $key => $value) {
-                echo "<td>";
-                echo $row[$key];
-                echo "</td>";
-            }
-            echo "</tr>";
-
-
-            if ($row[0] != "") {
-                $vertretungsTypes = array("Vertretung", "Statt-Vertretung", "Unterricht geändert", "Lehrertausch", "Sondereins.", "Raum-Vtr.", "Betreuung", "Trotz Absenz", "Raumänderung", "Verlegung");
-                if (array_search($row[1], $vertretungsTypes) !== false) {
-                    $lessons = explode("-", $row[3]);
-                    $teacher = explode("→", $row[5]);
-                    $subject = explode("→", $row[7]);
-                    $room = explode("→", $row[6]);
-                    $dateParts = explode(".", $row[2]);
-                    foreach ($lessons as $lesson) {
-
-                        $event = array();
-                        $event["date"] = "2020-" . $dateParts[1] . "-" . $dateParts[0];
-                        $event["lesson"] = $lesson;
-                        $event["subject"] = explode("-", $subject[0])[0];
-                        if (sizeof($subject) > 1) {
-                            $event["newSubject"] = explode("-", $subject[1])[0];
-                        } else {
-                            $event["newSubject"] = explode("-", $subject[0])[0];
-                        }
-
-                        $event["teacher"] = $teacher[0];
-                        if (sizeof($teacher) > 1) {
-                            $event["newTeacher"] = $teacher[1];
-                        } else {
-                            $event["newTeacher"] = $teacher[0];
-                        }
-
-                        if (sizeof($room) > 1) {
-                            $event["newRoom"] = $room[1];
-                        } else {
-                            $event["newRoom"] = $room[0];
-                        }
-
-                        $event["info"] = $row[10];
-                        if ($event["info"] == "") {
-                            if($row[1] == "Raum-Vtr."){
-                                $event["info"] = "Raumänderung";
-                            }else{
-                                $event["info"] = $row[1];
-                            }
-
-                        }
-                        $event["class"] = $row[4];
-                        if ($event["class"] == "Q1" || $event["class"] == "Q2" || $event["class"] == "EF") {
-                            $event["class"] = $event["class"] . "/" . $subject[0];
-                        }
-                        $event["id"] = generateId($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
-
-                        if ($row[4] != "" && $row[7] != "---") {
-                            array_push($vertretung, $event);
-                            createVertRow($event);
-                        }
+                if ($row[1] == "Klausur") {
+                    $entry = new Klausur();
+                    $entry->setDate(formatDate($row[2]));
+                    $entry->setTeacher($row[5]);
+                    $entry->setGrade($row[4]);
+                    $entry->setCourse($row[7]);
+                    $entry->setRoom($row[6]);
+                    $entry->setType($row[1]);
+                    $lessons = explode(" - ", $row[3]);
+                    for ($k = 0; $k < sizeof($lessons); $k++) {
+                        $lessons[$k] = intval($lessons[$k]);
                     }
-
-                    if (!in_array($event["date"], $days)) {
-                        array_push($days, $event["date"]);
-                    }
-                } elseif ($row[1] == "Entfall") {
-                    if ($row[11] != "KL") {
-                        $lessons = explode("-", $row[3]);
-                        $teacher = explode("→", $row[5]);
-                        $subject = explode("→", $row[7]);
-                        $dateParts = explode(".", $row[2]);
-                        foreach ($lessons as $lesson) {
-                            $event = array();
-                            $event["date"] = "2020-" . $dateParts[1] . "-" . $dateParts[0];
-                            $event["lesson"] = $lesson;
-                            $event["subject"] = explode("-", $subject[0])[0];
-                            $event["newSubject"] = "---";
-                            $event["teacher"] = $teacher[0];
-                            $event["newTeacher"] = "---";
-                            $event["newRoom"] = "---";
-
-                            $event["info"] = $row[10];
-                            if ($event["info"] == "") {
-                                $event["info"] = $row[1];
-                            }
-                            $event["class"] = $row[4];
-                            if ($event["class"] == "Q1" || $event["class"] == "Q2" || $event["class"] == "EF") {
-                                $event["class"] = $event["class"] . "/" . $subject[0];
-                            }
-                            $event["id"] = generateId($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
-
-                            //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
-                            $dateString = str_pad($dateParts[0], 2, "0", STR_PAD_LEFT) . "-" . str_pad($dateParts[1], 2, "0", STR_PAD_LEFT) . "-2020";
-                            //$examsInLesson = json_decode(file_get_contents(Config::$url_web . "/api/klausuren.php?date=" . $dateString . "&secret=" . Config::$api_secret));
-
-                            $isKLSup = false;
-                            $lesson = str_replace(" ", "", $lesson);
-                            if ($row[4] != "" && $row[7] != "---") {
-                                if (!$isKLSup) {
-                                    createVertRow($event);
-                                    array_push($vertretung, $event);
-
-                                    if (!in_array($event["date"], $days)) {
-                                        array_push($days, $event["date"]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } elseif ($row[1] == "Raum-Vtr.") {
-                    $lessons = explode("-", $row[3]);
-                    $subject = explode("→", $row[7]);
-                    $room = explode("→", $row[6]);
-                    $dateParts = explode(".", $row[2]);
-
-
-                    foreach ($lessons as $lesson) {
-
-                        $event = array();
-                        $event["teacher"] = $row[5];
-                        $event["newTeacher"] = $row[5];
-                        $event["date"] = "2020-" . $dateParts[1] . "-" . $dateParts[0];
-                        $event["lesson"] = $lesson;
-                        $event["subject"] = explode("-", $subject[0])[0];
-                        if (sizeof($subject) > 1) {
-                            $event["newSubject"] = $subject[1];
+                    if (sizeof($lessons) > 1) {
+                        if ($lessons[0] + 1 == $lessons[1]) {
+                            $entry->setLessons($lessons);
                         } else {
-                            $event["newSubject"] = $subject[0];
-                        }
-                        if (sizeof($room) > 1) {
-                            $event["newRoom"] = $room[1];
-                        } else {
-                            $event["newRoom"] = $room[0];
-                        }
+                            $lesson = $lessons[0];
+                            $tmpLess = array();
+                            do {
 
-                        $event["info"] = $row[10];
-                        if ($event["info"] == "") {
-                            $event["info"] = $row[1];
+                                array_push($tmpLess, $lesson);
+                                $lesson++;
+                            } while ($lesson <= $lessons[1]);
+                            $entry->setLessons($tmpLess);
                         }
-                        $event["class"] = $row[4];
-                        if ($event["class"] == "Q1" || $event["class"] == "Q2" || $event["class"] == "EF") {
-                            $event["class"] = $event["class"] . "/" . $subject[0];
-                        }
-                        $event["id"] = generateId($event["date"], $event["class"], $event["lesson"], $event["teacher"]);
-                        //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
-                        array_push($vertretung, $event);
-                        createVertRow($event);
-                    }
-
-                    if (!in_array($event["date"], $days)) {
-                        array_push($days, $event["date"]);
-                    }
-                } elseif ($row[1] == "Pausenaufsicht") {
-                    $dateParts = explode(".", $row[2]);
-                    $teacher = explode("→", $row[5]);
-                    $event = array();
-                    $event["date"] = "2020-" . $dateParts[1] . "-" . $dateParts[0];
-                    if (in_array($row[3], $supervisonTimesKeys)) {
-                        $event["time"] = $supervisonTimes[$row[3]];
                     } else {
-                        $event["time"] = $row[3];
+                        $entry->setLessons($lessons);
                     }
 
-                    $event["teacher"] = $teacher[1];
-                    $event["location"] = $row[6];
-                    //echo "Event:" . $rowNum . json_encode($event) . "<br>\n";
-                    array_push($aufsichten, $event);
+                    array_push($data[$row[1]], $entry);
+
+                } elseif ($row[1] == "Entfall") {
+
+                    $vplanEntry = new VplanEntry();
+                    $vplanEntry->setDate(formatDate($row[2]));
+
+                    if (!in_array(formatDate($row[2]), $data["activeDays"])) {
+                        array_push($data["activeDays"], formatDate($row[2]));
+                    }
+
+                    $vplanEntry->setTeacher($row[5]);
+                    $vplanEntry->setGrade($row[4]);
+                    $vplanEntry->setCourse($row[4]);
+                    $vplanEntry->setSubject($row[7]);
+                    $vplanEntry->setNewSubject($row[7]);
+                    $vplanEntry->setType($row[1]);
+                    if ($row[10] == "") {
+                        $row[10] = $row[1];
+                    }
+                    $vplanEntry->setInfo($row[10]);
+
+                    $lessons = explode(" - ", $row[3]);
+                    for ($k = 0; $k < sizeof($lessons); $k++) {
+                        $lessons[$k] = intval($lessons[$k]);
+                    }
+                    if (sizeof($lessons) > 1) {
+                        if ($lessons[0] + 1 == $lessons[1]) {
+                            $vplanEntry->setLessons($lessons);
+                        } else {
+                            $lesson = $lessons[0];
+                            $tmpLess = array();
+                            do {
+
+                                array_push($tmpLess, $lesson);
+                                $lesson++;
+                            } while ($lesson <= $lessons[1]);
+                            $vplanEntry->setLessons($tmpLess);
+                        }
+                    } else {
+                        $vplanEntry->setLessons($lessons);
+                    }
+                    array_push($data[$row[1]], $vplanEntry);
+                } elseif ($row[1] == "Vertretung" || $row[1] == "Betreuung") {
+
+                    $vplanEntry = new VplanEntry();
+                    $vplanEntry->setDate(formatDate($row[2]));
+                    $vplanEntry->setGrade($row[4]);
+                    $vplanEntry->setCourse($row[4]);
+                    $vplanEntry->setSubject($row[7]);
+                    $vplanEntry->setNewSubject($row[7]);
+
+                    $teacher = explode("→", $row[5]);
+                    $vplanEntry->setTeacher($teacher[0]);
+                    $vplanEntry->setNewTeacher($teacher[1]);
+                    $vplanEntry->setType($row[1]);
+                    $rooms = explode("→", $row[6]);
+                    $vplanEntry->setRoom($rooms[sizeof($rooms) - 1]);
+
+                    if ($row[10] == "") {
+                        $row[10] = $row[1];
+                    }
+                    $vplanEntry->setInfo($row[10]);
+
+                    $lessons = explode(" - ", $row[3]);
+                    for ($k = 0; $k < sizeof($lessons); $k++) {
+                        $lessons[$k] = intval($lessons[$k]);
+                    }
+                    if (sizeof($lessons) > 1) {
+                        if ($lessons[0] + 1 == $lessons[1]) {
+                            $vplanEntry->setLessons($lessons);
+                        } else {
+                            $lesson = $lessons[0];
+                            $tmpLess = array();
+                            do {
+
+                                array_push($tmpLess, $lesson);
+                                $lesson++;
+                            } while ($lesson <= $lessons[1]);
+                            $vplanEntry->setLessons($tmpLess);
+                        }
+                    } else {
+                        $vplanEntry->setLessons($lessons);
+                    }
+                    array_push($data[$row[1]], $vplanEntry);
+                } elseif ($row[1] == "Raumänderung") {
+
+                    $vplanEntry = new VplanEntry();
+                    $vplanEntry->setDate(formatDate($row[2]));
+                    $vplanEntry->setTeacher($row[5]);
+                    $vplanEntry->setNewTeacher($row[5]);
+                    $vplanEntry->setGrade($row[4]);
+                    $vplanEntry->setCourse($row[4]);
+                    $vplanEntry->setInfo($row[10]);
+                    $vplanEntry->setType($row[1]);
+                    $teacher = explode("→", $row[5]);
+
+                    $rooms = explode("→", $row[6]);
+                    $vplanEntry->setRoom($rooms[sizeof($rooms) - 1]);
+
+                    $lessons = explode(" - ", $row[3]);
+                    for ($k = 0; $k < sizeof($lessons); $k++) {
+                        $lessons[$k] = intval($lessons[$k]);
+                    }
+                    if (sizeof($lessons) > 1) {
+                        if ($lessons[0] + 1 == $lessons[1]) {
+                            $vplanEntry->setLessons($lessons);
+                        } else {
+                            $lesson = $lessons[0];
+                            $tmpLess = array();
+                            do {
+
+                                array_push($tmpLess, $lesson);
+                                $lesson++;
+                            } while ($lesson <= $lessons[1]);
+                            $vplanEntry->setLessons($tmpLess);
+                        }
+                    } else {
+                        $vplanEntry->setLessons($lessons);
+                    }
+                    array_push($data[$row[1]], $vplanEntry);
                 }
             }
-
-            $rowNum++;
         }
-
     } else {
         echo SimpleXLSX::parseError();
     }
 
-    $output = array();
-    $output["vertretungen"] = $vertretung;
-    $output["days"] = $days;
-    $output["aufsichten"] = $aufsichten;
-
-    return $output;
+    return $data;
 }
 
+function removeExamSupervisors($data)
+{
+    if (isset($data["Klausur"]) && isset($data["Entfall"])) {
+        $exams = [];
+        for ($i = 0; $i < sizeof($data["Klausur"]); $i++) {
+            $exam = $data["Klausur"][$i];
+
+            if (!isset($exams[$exam->getDate()])) {
+                $exams[$exam->getDate()] = [];
+            }
+            for ($j = 0; $j < sizeof($exam->getLessons()); $j++) {
+                if (!isset($exams[$exam->getDate()][$exam->getLessons()[$j]])) {
+                    $exams[$exam->getDate()][$exam->getLessons()[$j]] = [];
+                }
+                $exams[$exam->getDate()][$exam->getLessons()[$j]][] = $exam;
+            }
+        }
+        $woSupervision = [];
+        $entfalls = $data["Entfall"];
+        for ($i = 0; $i < sizeof($entfalls); $i++) {
+            $entfall = $entfalls[$i];
+            $supervisor = false;
+
+            if (isset($exams[$entfall->getDate()])) {
+                for ($j = 0; $j < sizeof($entfall->getLessons()); $j++) {
+                    if (isset($exams[$entfall->getDate()][$entfall->getLessons()[$j]])) {
+                        $lessonExams = $exams[$entfall->getDate()][$entfall->getLessons()[$j]];
+                        for ($k = 0; $k < sizeof($lessonExams); $k++) {
+                            $exam = $lessonExams[$k];
+                            if ($exam->getTeacher() == $entfall->getTeacher()) {
+                                $supervisor = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!$supervisor) {
+                array_push($woSupervision, $entfall);
+            }
+        }
+        $data["Entfall"] = $woSupervision;
+    }
+
+    return $data;
+}
+
+try {
+    $json = loadXLSXtoObject(__DIR__ . '/../ImportFiles/Untis.xlsx');
+    $data = removeExamSupervisors($json);
+
+//Create Payload
+
+    $payload = [];
+    if (isset($data["Entfall"])) {
+        $payload = array_merge($payload, $data["Entfall"]);
+    }
+    if (isset($data["Vertretung"])) {
+        $payload = array_merge($payload, $data["Vertretung"]);
+    }
+    if (isset($data["Betreuung"])) {
+        $payload = array_merge($payload, $data["Betreuung"]);
+    }
+    if (isset($data["Raumänderung"])) {
+        $payload = array_merge($payload, $data["Raumänderung"]);
+    }
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => apiUrl . '/vertretungsplan/vertretungen/date/',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'DELETE',
+        CURLOPT_POSTFIELDS => json_encode($data["activeDays"]),
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: ' . $_SERVER["HTTP_AUTHORIZATION"],
+            'Content-Type: application/json'
+        ),
+    ));
+
+    $response = curl_exec($curl);
+    curl_close($curl);
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => apiUrl . '/vertretungsplan/activedates/',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => json_encode($data["activeDays"]),
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: ' . $_SERVER["HTTP_AUTHORIZATION"],
+            'Content-Type: application/json'
+        ),
+    ));
+
+    $response = curl_exec($curl);
+    curl_close($curl);
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => apiUrl . '/vertretungsplan/vertretungen/',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => json_encode($payload),
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: ' . $_SERVER["HTTP_AUTHORIZATION"],
+            'Content-Type: application/json'
+        ),
+    ));
+    $response = curl_exec($curl);
+    echo $data;
+    echo "<h1>Completed</h1>";
+} catch (Exception $e) {
+    echo $e;
+}
 ?>
-    <table>
-        <tbody>
-        <?php
-
-        $insert = loadXlsx();
-
-        ?>
-      </tbody>
-    </table>
-
-<?php
-
-$curl = curl_init();
-curl_setopt_array($curl, array(
-    CURLOPT_URL => apiUrl.'/vertretungsplan/vertretungen/date/',
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 0,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'DELETE',
-    CURLOPT_POSTFIELDS => json_encode($insert["days"]),
-    CURLOPT_HTTPHEADER => array(
-        'Authorization: '. $_SERVER["HTTP_AUTHORIZATION"],
-        'Content-Type: application/json'
-    ),
-));
-
-$response = curl_exec($curl);
-curl_close($curl);
-
-$curl = curl_init();
-curl_setopt_array($curl, array(
-    CURLOPT_URL => apiUrl.'/vertretungsplan/activedates/',
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 0,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'POST',
-    CURLOPT_POSTFIELDS => json_encode($insert["days"]),
-    CURLOPT_HTTPHEADER => array(
-        'Authorization: '. $_SERVER["HTTP_AUTHORIZATION"],
-        'Content-Type: application/json'
-    ),
-));
-
-$response = curl_exec($curl);
-curl_close($curl);
-
-$curl = curl_init();
-
-curl_setopt_array($curl, array(
-    CURLOPT_URL => apiUrl.'/vertretungsplan/vertretungen/',
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 0,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'POST',
-    CURLOPT_POSTFIELDS => json_encode($insert["vertretungen"]),
-    CURLOPT_HTTPHEADER => array(
-        'Authorization: '. $_SERVER["HTTP_AUTHORIZATION"],
-        'Content-Type: application/json'
-    ),
-));
-
-$response = curl_exec($curl);
-curl_close($curl);
-
-echo "<h1>Completed</h1>";
