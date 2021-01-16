@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2020. Nils Witt
+ * Copyright (c) 2021. Nils Witt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
@@ -57,14 +57,14 @@ async function loadVplan() {
             eventsContainer.innerHTML = "";
             let events = await fetchVplanByDay(date);
             events.sort(function (e1, e2) {
-                if (e1["Kurs"] < e2["Kurs"]) {
+                if (e1["course"] < e2["course"]) {
                     return -1;
-                } else if (e1["Kurs"] > e2["Kurs"]) {
+                } else if (e1["course"] > e2["course"]) {
                     return 1;
                 } else {
-                    if (e1["Stunde"] < e2["Stunde"]) {
+                    if (e1["lesson"] < e2["lesson"]) {
                         return -1;
-                    } else if (e1["Stunde"] > e2["Stunde"]) {
+                    } else if (e1["lesson"] > e2["lesson"]) {
                         return 1;
                     } else {
                         return 0;
@@ -75,7 +75,7 @@ async function loadVplan() {
             if (todayString == date) {
                 for (let j = 0; j < events.length; j++) {
                     let event = events[j];
-                    if (lessonTimes[event["Stunde"]] < ((nowDate.getHours() * 60) + nowDate.getMinutes())) {
+                    if (lessonTimes[event["lesson"]] < ((nowDate.getHours() * 60) + nowDate.getMinutes())) {
                         events.splice(j, 1);
                         j--;
                     }
@@ -87,14 +87,14 @@ async function loadVplan() {
 
                 if (events[j + 1] != null) {
                     let next = events[j + 1];
-                    if (event["Datum"] == next["Datum"]) {
-                        if (event["Kurs"] == next["Kurs"]) {
-                            if (event["Fach"] == next["Fach"]) {
-                                if (event["FachNew"] == next["FachNew"]) {
-                                    if (event["Lehrer"] == next["Lehrer"]) {
-                                        if (event["LehrerNeu"] == next["LehrerNeu"]) {
-                                            if (event["RaumNew"] == next["RaumNew"]) {
-                                                event["Stunde"] = event["Stunde"] + " / " + next["Stunde"];
+                    if (event["date"] == next["date"]) {
+                        if (event["course"] == next["course"]) {
+                            if (event["subject"] == next["subject"]) {
+                                if (event["subjectNew"] == next["subjectNew"]) {
+                                    if (event["teacher"] == next["teacher"]) {
+                                        if (event["teacherNew"] == next["teacherNew"]) {
+                                            if (event["room"] == next["room"]) {
+                                                event["lesson"] = event["lesson"] + " / " + next["lesson"];
                                                 j++;
                                             }
                                         }
@@ -107,13 +107,12 @@ async function loadVplan() {
 
                 let row = <HTMLTableRowElement>document.getElementById('vplanRowTemplate').cloneNode(true);
                 eventsContainer.append(row);
-                row.getElementsByClassName("lesson").item(0).innerHTML = event["Stunde"];
-                row.getElementsByClassName("course").item(0).innerHTML = event["Kurs"];
-                row.getElementsByClassName("subject").item(0).innerHTML = event["Fach"];
-                row.getElementsByClassName("newSubject").item(0).innerHTML = event["FachNew"];
-                row.getElementsByClassName("newTeacher").item(0).innerHTML = event["LehrerNeu"];
-                row.getElementsByClassName("newTeacher").item(0).innerHTML = event["LehrerNeu"];
-                row.getElementsByClassName("newRoom").item(0).innerHTML = event["RaumNew"];
+                row.getElementsByClassName("lesson").item(0).innerHTML = event["lesson"];
+                row.getElementsByClassName("course").item(0).innerHTML = event["course"];
+                row.getElementsByClassName("subject").item(0).innerHTML = event["subject"];
+                row.getElementsByClassName("newSubject").item(0).innerHTML = event["subjectNew"];
+                row.getElementsByClassName("newTeacher").item(0).innerHTML = event["teacherNew"];
+                row.getElementsByClassName("newRoom").item(0).innerHTML = event["room"];
                 row.getElementsByClassName("info").item(0).innerHTML = event["info"];
             }
         }
