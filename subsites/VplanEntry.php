@@ -27,6 +27,7 @@ class VplanEntry implements JsonSerializable
     private $subject = "sbj";
     private $newSubject = "---";
     private $type = "---";
+    private $errors = [];
 
     /**
      * @return string
@@ -223,6 +224,11 @@ class VplanEntry implements JsonSerializable
     public function setRoom($room): void
     {
         $this->room = $room;
+    }
+
+    public function addError($error)
+    {
+        array_push($this->errors, $error);
     }
 
 

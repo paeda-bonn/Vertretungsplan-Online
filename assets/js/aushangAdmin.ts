@@ -103,7 +103,7 @@ async function submitElementToApi() {
     }
 
     // @ts-ignore
-    $.notify("Bitte warten", "info");
+    //$.notify("Bitte warten", "info");
 
     content = contentContainer.value;
     content2 = content2Container.value;
@@ -130,7 +130,7 @@ async function submitElementToApi() {
         await addAushang(dataset);
         loadActiveElementsTable();
         // @ts-ignore
-        $.notify("Erstellt", "success");
+        //$.notify("Erstellt", "success");
     } catch (e) {
         console.error(e);
     }

@@ -18,7 +18,7 @@ async function login() {
     try {
         let token = await requestApiToken(username, password);
         localStorage.setItem("token", token);
-        window.location.href = "/onlineBeta/views/vertretungsplan.html";
+        window.location.href = "/online/views/vertretungsplan.html";
     } catch (e) {
         console.error(e);
     }

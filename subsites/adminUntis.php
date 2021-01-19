@@ -27,12 +27,11 @@ require_once 'VplanEntry.php';
  */
 
 
-const apiUrl = "https://vplan.moodle-paeda.de/apiBeta/index.php";
+const apiUrl = "https://vplan.moodle-paeda.de/api/index.php";
 
 function authTest($apiUrl)
 {
     $curl = curl_init();
-
 
     curl_setopt_array($curl, array(
         CURLOPT_URL => $apiUrl . '/vertretungsplan',
@@ -42,7 +41,7 @@ function authTest($apiUrl)
         CURLOPT_TIMEOUT => 0,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_HTTPHEADER => array(
             'Authorization: ' . $_SERVER["HTTP_AUTHORIZATION"]
         ),
@@ -54,43 +53,17 @@ function authTest($apiUrl)
     if ($response == "401") {
         http_response_code(401);
         die("401");
-    } else {
-        return;
     }
 }
 
 authTest(apiUrl);
 
-
 $supervisonTimes = array("0/1" => "Früh", "2/3" => "1. Pause", "4/5" => "2. Pause");
 $supervisonTimesKeys = array("0/1", "2/3", "4/5");
 
-function generateId($date, $kurs, $stunde, $teacher)
-{
-
-    $timestamp = strtotime($date);
-    $kursex = explode("/", str_replace(' ', '', $kurs));
-    $stufe = $kursex[0];
-    if (isset($kursex[1])) {
-        $kurs = $kursex[1];
-    } else {
-        $kurs = "";
-    }
-
-
-    $wochentag = date("w", $timestamp) - 1;
-    $stunde = $stunde - 1;
-    $woche = date("W", $timestamp);
-    $jahr = date("Y", $timestamp);
-
-    $id = $stufe . "/" . $kurs . "/" . $teacher . "/" . $wochentag . "/" . $stunde . "/" . $woche . "/" . $jahr;
-
-    return $id;
-}
-
 function formatDate($string)
 {
-    return date("Y-m-d", strtotime($string . "2020"));
+    return date("Y-m-d", strtotime($string . date("Y")));
 }
 
 header('Content-Type: application/json');
@@ -236,6 +209,8 @@ function loadXLSXtoObject($path)
                     $vplanEntry->setNewTeacher($row[5]);
                     $vplanEntry->setGrade($row[4]);
                     $vplanEntry->setCourse($row[4]);
+                    $vplanEntry->setSubject($row[7]);
+                    $vplanEntry->setNewSubject($row[7]);
                     $vplanEntry->setInfo($row[10]);
                     $vplanEntry->setType($row[1]);
                     $teacher = explode("→", $row[5]);
@@ -320,8 +295,13 @@ function removeExamSupervisors($data)
     return $data;
 }
 
+function checkValidity($vplanEntry){
+
+}
+
+
 try {
-    $json = loadXLSXtoObject(__DIR__ . '/../ImportFiles/Untis.xlsx');
+    $json = loadXLSXtoObject(__DIR__ . '/../../online/ImportFiles/Untis.xlsx');
     $data = removeExamSupervisors($json);
 
 //Create Payload
@@ -397,8 +377,7 @@ try {
         ),
     ));
     $response = curl_exec($curl);
-    echo $data;
-    echo "<h1>Completed</h1>";
+    echo json_encode($data);
 } catch (Exception $e) {
     echo $e;
 }

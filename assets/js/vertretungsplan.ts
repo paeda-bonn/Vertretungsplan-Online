@@ -62,12 +62,18 @@ async function loadVplan() {
                 } else if (e1["course"] > e2["course"]) {
                     return 1;
                 } else {
-                    if (e1["lesson"] < e2["lesson"]) {
+                    if (e1["subject"] < e2["subject"]) {
                         return -1;
-                    } else if (e1["lesson"] > e2["lesson"]) {
+                    } else if (e1["subject"] > e2["subject"]) {
                         return 1;
                     } else {
-                        return 0;
+                        if (e1["lesson"] < e2["lesson"]) {
+                            return -1;
+                        } else if (e1["lesson"] > e2["lesson"]) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
                     }
                 }
             });

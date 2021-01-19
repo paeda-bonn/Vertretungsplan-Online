@@ -11,7 +11,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const apiUrl = "https://vplan.moodle-paeda.de/apiBeta/index.php";
+const apiUrl = "https://vplan.moodle-paeda.de/api/index.php";
 function authTest($apiUrl){
     $curl = curl_init();
 
@@ -24,7 +24,7 @@ function authTest($apiUrl){
         CURLOPT_TIMEOUT => 0,
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_HTTPHEADER => array(
             'Authorization: '. $_SERVER["HTTP_AUTHORIZATION"]
         ),
@@ -264,6 +264,7 @@ function xmlToArray($xml)
 
         $dataset["supervisors"] = ["1" => "a"];
 
+
         $dataset["supervisors"]["1"] = json_decode(json_encode($eins), true)[0];
         $dataset["supervisors"]["2"] = json_decode(json_encode($zwei), true)[0];
         $dataset["supervisors"]["3"] = json_decode(json_encode($drei), true)[0];
@@ -356,9 +357,6 @@ $response = curl_exec($curl);
 
 curl_close($curl);
 
-echo "<h1>Completed</h1>";
-
-echo "<h2>Alle (" . $all . "): </h2>";
 echo $tableALL;
 ?>
 

@@ -9,12 +9,12 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-const api_url = "https://vplan.moodle-paeda.de/apiBeta/index.php";
+const api_url = "https://vplan.moodle-paeda.de/api/index.php";
 const token = localStorage.getItem("token");
 
 function authError() {
     localStorage.removeItem("token");
-    window.location.href = "/onlineBeta/views/login.html"
+    window.location.href = "/online/views/login.html"
 }
 
 function requestApiToken(username: string, password: string) {
@@ -77,7 +77,7 @@ async function importKlausuren() {
                 redirect: 'follow'
             };
 
-            res = await fetch("/onlineBeta/subsites/adminKlausuren.php", requestOptions);
+            res = await fetch("/online/subsites/adminKlausuren.php", requestOptions);
         } catch (e) {
             console.log(e);
         }
@@ -105,7 +105,7 @@ async function importUntis() {
                 redirect: 'follow'
             };
 
-            res = await fetch("/onlineBeta/subsites/adminUntis.php", requestOptions);
+            res = await fetch("/online/subsites/adminUntis.php", requestOptions);
         } catch (e) {
             console.log(e);
         }
