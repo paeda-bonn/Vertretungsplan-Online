@@ -1,4 +1,3 @@
-<?php
 /*
  * MIT License
  *
@@ -11,13 +10,23 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-if ($admin) {
-    echo "<h1>Bitte Wählen</h1>";
-} else {
-    header('WWW-Authenticate: Basic realm="Vertretungsplan"');
-    header('HTTP/1.0 401 Unauthorized');
-    die ("Not authorized");
-}
+document.addEventListener("DOMContentLoaded", async () => {
+    let dataArray: any[] = await loadDataAushang();
+    let container = document.getElementById('aushangTableBody');
+    for (let i = 0; i < dataArray.length; i++) {
+        let dataset = dataArray[i];
 
+        let dataRow = <HTMLTableRowElement>document.getElementById('aushangRowTemplate').cloneNode(true);
+        container.append(dataRow);
+        let column = <HTMLTableCellElement>dataRow.getElementsByTagName('td').item(0);
+        column.innerText = dataset["content"][0];
+        column.style.backgroundColor = dataset["color"];
 
-?>
+        for (let j = 1; j < dataset["content"].length; j++) {
+            column.colSpan = 1;
+            column = <HTMLTableCellElement>column.cloneNode(true);
+            dataRow.append(column);
+            column.innerText = dataset["content"][j];
+        }
+    }
+});
