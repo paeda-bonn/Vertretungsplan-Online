@@ -49,13 +49,16 @@ async function loadVplan() {
         if (date != "") {
             let dayContainer = <HTMLDivElement>document.getElementById('dayPreset').cloneNode(true);
             dayContainer.id = "Container-" + date;
-            document.getElementById('tableContainer').append(dayContainer);
+
 
             (<HTMLSpanElement>dayContainer.getElementsByClassName('dateContainer').item(0)).innerText = timeDisplay(date);
 
             let eventsContainer = dayContainer.getElementsByTagName('tbody').item(1);
             eventsContainer.innerHTML = "";
             let events = await fetchVplanByDay(date);
+            if(events.length > 0){
+                document.getElementById('tableContainer').append(dayContainer);
+            }
             events.sort(function (e1, e2) {
                 if (e1["course"] < e2["course"]) {
                     return -1;
