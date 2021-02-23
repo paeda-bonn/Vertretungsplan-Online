@@ -35,6 +35,7 @@ function timeDisplay(time) {
 
 async function loadVplan() {
     //TODO set last refreshed
+    let container = document.createElement('div');
     let activeDays: string[] = await loadVplanActiveDays();
     let nowDate = new Date();
 
@@ -56,8 +57,8 @@ async function loadVplan() {
             let eventsContainer = dayContainer.getElementsByTagName('tbody').item(1);
             eventsContainer.innerHTML = "";
             let events = await fetchVplanByDay(date);
-            if(events.length > 0){
-                document.getElementById('tableContainer').append(dayContainer);
+            if (events.length > 0) {
+                container.append(dayContainer);
             }
             events.sort(function (e1, e2) {
                 if (e1["course"] < e2["course"]) {
@@ -126,6 +127,7 @@ async function loadVplan() {
             }
         }
     }
+    document.getElementById('tableContainer').innerHTML = container.innerHTML;
 }
 
 //Wait for Dom ready
