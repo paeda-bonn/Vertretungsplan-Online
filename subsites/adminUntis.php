@@ -211,6 +211,9 @@ function loadXLSXtoObject($path)
                     $vplanEntry->setCourse($row[4]);
                     $vplanEntry->setSubject($row[7]);
                     $vplanEntry->setNewSubject($row[7]);
+                    if ($row[10] == "") {
+                        $row[10] = $row[1];
+                    }
                     $vplanEntry->setInfo($row[10]);
                     $vplanEntry->setType($row[1]);
                     $teacher = explode("→", $row[5]);
@@ -295,7 +298,8 @@ function removeExamSupervisors($data)
     return $data;
 }
 
-function checkValidity($vplanEntry){
+function checkValidity($vplanEntry)
+{
 
 }
 
@@ -377,7 +381,7 @@ try {
         ),
     ));
     $response = curl_exec($curl);
-    echo json_encode($data);
+    echo json_encode(["activeDays" => $data["activeDays"], "events" => $payload]);
 } catch (Exception $e) {
     echo $e;
 }
