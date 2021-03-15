@@ -69,7 +69,7 @@ function formatDate($string)
 header('Content-Type: application/json');
 function loadXLSXtoObject($path)
 {
-    $acceptedEntryTypes = ["Betreuung", "Raumänderung", "Entfall", "Klausur", "Vertretung", "Klausur"];
+    $acceptedEntryTypes = ["Betreuung", "Raumänderung", "Entfall", "Klausur", "Vertretung", "Klausur", "Vertr."];
 
     $data = array();
     $data["activeDays"] = [];
@@ -94,7 +94,6 @@ function loadXLSXtoObject($path)
                     $entry->setGrade($row[4]);
                     $entry->setCourse($row[7]);
                     $entry->setRoom($row[6]);
-                    $entry->setType($row[1]);
                     $lessons = explode(" - ", $row[3]);
                     for ($k = 0; $k < sizeof($lessons); $k++) {
                         $lessons[$k] = intval($lessons[$k]);
@@ -159,7 +158,7 @@ function loadXLSXtoObject($path)
                         $vplanEntry->setLessons($lessons);
                     }
                     array_push($data[$row[1]], $vplanEntry);
-                } elseif ($row[1] == "Vertretung" || $row[1] == "Betreuung") {
+                } elseif ($row[1] == "Vertretung" || $row[1] == "Vertr." || $row[1] == "Betreuung") {
 
                     $vplanEntry = new VplanEntry();
                     $vplanEntry->setDate(formatDate($row[2]));
@@ -170,11 +169,19 @@ function loadXLSXtoObject($path)
 
                     $teacher = explode("→", $row[5]);
                     $vplanEntry->setTeacher($teacher[0]);
-                    $vplanEntry->setNewTeacher($teacher[1]);
+                    if (sizeof($teacher) > 1) {
+                        $vplanEntry->setNewTeacher($teacher[1]);
+                    } else {
+                        $vplanEntry->setNewTeacher($teacher[0]);
+                    }
+
                     $vplanEntry->setType($row[1]);
                     $rooms = explode("→", $row[6]);
                     $vplanEntry->setRoom($rooms[sizeof($rooms) - 1]);
 
+                    $subjects = explode("→", $row[7]);
+                    $vplanEntry->setNewSubject($subjects[sizeof($subjects) - 1]);
+                    $vplanEntry->setSubject($subjects[0]);
                     if ($row[10] == "") {
                         $row[10] = $row[1];
                     }
@@ -316,6 +323,9 @@ try {
     }
     if (isset($data["Vertretung"])) {
         $payload = array_merge($payload, $data["Vertretung"]);
+    }
+    if (isset($data["Vertr."])) {
+        $payload = array_merge($payload, $data["Vertr."]);
     }
     if (isset($data["Betreuung"])) {
         $payload = array_merge($payload, $data["Betreuung"]);
