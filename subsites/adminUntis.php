@@ -312,7 +312,7 @@ function checkValidity($vplanEntry)
 
 
 try {
-    $json = loadXLSXtoObject(__DIR__ . '/../../online/ImportFiles/Untis.xlsx');
+    $json = loadXLSXtoObject(__DIR__ . '/../ImportFiles/Untis.xlsx');
     $data = removeExamSupervisors($json);
 
 //Create Payload
