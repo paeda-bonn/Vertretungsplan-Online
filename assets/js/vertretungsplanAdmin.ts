@@ -11,10 +11,46 @@
  */
 
 async function loadDataUntis() {
-    let data = await importUntis();
-    console.log(data);
-    if (typeof data === "string") {
-        document.getElementById('container').innerHTML = data;
+    let json = await importUntis();
+    let data;
+    if (typeof json === "string") {
+        data = JSON.parse(json)
+    }
+    let container = document.createElement("table");
+
+
+    let daysTbody = <HTMLTableRowElement>document.getElementById('dayBodyTemplate').cloneNode(true);
+    if(data.hasOwnProperty("activeDays")){
+        for (let i = 0; i < data["activeDays"].length; i++) {
+            let row = <HTMLTableRowElement>document.getElementById('dayRowTemplate').cloneNode(true);
+            row.getElementsByTagName('td')[0].innerText = data["activeDays"][i];
+            daysTbody.append(row);
+        }
+    }
+    container.append(daysTbody);
+
+    let datasetsTbody = <HTMLTableRowElement>document.getElementById('datasetsBody').cloneNode(true);
+    if(data.hasOwnProperty("events")){
+        for (let i = 0; i < data["events"].length; i++) {
+            let event = data["events"][i];
+
+            let row = <HTMLTableRowElement>document.getElementById('datasetRowTemplate').cloneNode(true);
+            row.getElementsByClassName("date").item(0).innerHTML = event["date"];
+            row.getElementsByClassName("lesson").item(0).innerHTML = event["lessons"];
+            row.getElementsByClassName("course").item(0).innerHTML = event["course"];
+            row.getElementsByClassName("subject").item(0).innerHTML = event["subject"];
+            row.getElementsByClassName("newSubject").item(0).innerHTML = event["newSubject"];
+            row.getElementsByClassName("newTeacher").item(0).innerHTML = event["newTeacher"];
+            row.getElementsByClassName("newRoom").item(0).innerHTML = event["room"];
+            row.getElementsByClassName("info").item(0).innerHTML = event["info"];
+            datasetsTbody.append(row);
+        }
+    }
+    container.append(datasetsTbody);
+
+    document.getElementById('responseData').innerHTML = container.innerHTML;
+    if (typeof json === "string") {
+        //document.getElementById('container').innerHTML = json;
     }
 }
 
