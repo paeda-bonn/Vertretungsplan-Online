@@ -114,6 +114,9 @@ async function loadVplan() {
                         }
                     }
                 }
+                if (events.length > 0) {
+                    container.append(dayContainer);
+                }
 
                 let row = <HTMLTableRowElement>document.getElementById('vplanRowTemplate').cloneNode(true);
                 eventsContainer.append(row);
