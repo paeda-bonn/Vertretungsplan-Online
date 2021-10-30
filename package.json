@@ -12,5 +12,9 @@
       "email": "nils@nils-witt.de",
       "url": "https://github.com/Nils-witt"
     }
-  ]
+  ],
+  "scripts": {
+    "build": "npx tsc",
+    "test": "exit 0"
+  }
 }

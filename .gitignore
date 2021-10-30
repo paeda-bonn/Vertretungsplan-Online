@@ -8,5 +8,3 @@
 *.css.map
 *.js
 *.js.map
-
-/package-lock.json
