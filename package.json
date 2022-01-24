@@ -2,7 +2,7 @@
   "name": "vertretungsplan-online",
   "version": "2.0.0",
   "dependencies": {
-    "sass": "^1.48.0",
+    "sass": "^1.49.0",
     "typescript": "^4.5.5"
   },
   "author": "Witt, Nils",
