@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "dependencies": {
     "sass": "^1.49.7",
-    "typescript": "^4.5.5"
+    "typescript": "^4.6.2"
   },
   "author": "Witt, Nils",
   "contributors": [
